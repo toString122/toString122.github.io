@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>2.第一个Mybatis程序</title>
+    <url>/2020/02/13/2-%E7%AC%AC%E4%B8%80%E4%B8%AAMybatis%E7%A8%8B%E5%BA%8F/</url>
+    <content><![CDATA[<h1 id="2-第一个Mybatis程序"><a href="#2-第一个Mybatis程序" class="headerlink" title="2.第一个Mybatis程序"></a>2.第一个Mybatis程序</h1>]]></content>
+      <categories>
+        <category>Mybatis</category>
+      </categories>
+  </entry>
+  <entry>
     <title>1.Mybatis简介</title>
     <url>/2020/02/13/1.Mybatis%E7%AE%80%E4%BB%8B/</url>
     <content><![CDATA[<p><strong>环境</strong></p>
@@ -77,7 +85,7 @@
       </categories>
   </entry>
   <entry>
-    <title>测试文章</title>
+    <title>Ajax</title>
     <url>/2020/02/13/Ajax/</url>
     <content><![CDATA[<h1 id="Ajax"><a href="#Ajax" class="headerlink" title="Ajax"></a>Ajax</h1><p>AJAX = Asynchronous JavaScript and XML（异步的 JavaScript 和 XML）。</p>
 <p>AJAX 不是新的编程语言，而是一种使用现有标准的新方法。</p>
