@@ -19,7 +19,7 @@
 <li>Junit</li>
 </ul>
 <p><strong>框架</strong>：配置文件。最好的方式就是看官网文档</p>
-<h1 id="1-简介"><a href="#1-简介" class="headerlink" title="1.简介"></a>1.简介</h1><p><img src="C:%5CUsers%5Cliwen%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20200213122746371.png" alt="image-20200213122746371"></p>
+<h1 id="1-简介"><a href="#1-简介" class="headerlink" title="1.简介"></a>1.简介</h1><p><img src="/images/image-20200213122746371.png" alt="image-20200213122746371"></p>
 <ul>
 <li>MyBatis 是一款优秀的<strong>持久层框架</strong>。</li>
 <li>它支持定制化 SQL、存储过程以及高级映射。</li>
