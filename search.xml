@@ -1,6 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>3.增删改查</title>
+    <url>/2020/02/13/3-%E5%A2%9E%E5%88%A0%E6%94%B9%E6%9F%A5/</url>
+    <content><![CDATA[<p><strong><em>注意点：增删改需要提交事务</em></strong></p>
+<h3 id="1-namespace"><a href="#1-namespace" class="headerlink" title="1.namespace"></a>1.namespace</h3><p>namespace中包名要和Dao/Mapper接口包名一致</p>
+<h3 id="2-select"><a href="#2-select" class="headerlink" title="2.select"></a>2.select</h3><p>查询语句；</p>
+<ul>
+<li>id：就是对应的namespace中的方法名</li>
+<li>resultType：SQL语句的返回值</li>
+<li>parameType：参数类型</li>
+</ul>
+<ol>
+<li><p>编写接口</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function">List&lt;User&gt; <span class="title">getAllUser</span><span class="params">()</span></span>;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>编写对应mapper中的sql语句</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">select</span> <span class="attr">id</span>=<span class="string">"getAllUser"</span> <span class="attr">resultType</span>=<span class="string">"pojo.User"</span>&gt;</span></span><br><span class="line">select * from user</span><br><span class="line"><span class="tag">&lt;/<span class="name">select</span>&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>测试</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test</span><span class="params">()</span> <span class="keyword">throws</span> Exception</span>&#123;</span><br><span class="line">    String resource = <span class="string">"mybatis-config.xml"</span>;</span><br><span class="line">    InputStream inputStream = Resources.getResourceAsStream(resource);</span><br><span class="line">    SqlSessionFactory sqlSessionFactory = <span class="keyword">new</span> SqlSessionFactoryBuilder().build(inputStream);</span><br><span class="line">    SqlSession session = sqlSessionFactory.openSession();</span><br><span class="line">    System.out.println(session.selectList(<span class="string">"pojo.UserMapper.getAllUser"</span>));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+<h3 id="3-Insert"><a href="#3-Insert" class="headerlink" title="3.Insert"></a>3.Insert</h3><figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="comment">&lt;!--对象中的属性可以直接取出来--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">insert</span> <span class="attr">id</span>=<span class="string">"addUser"</span> <span class="attr">parameterType</span>=<span class="string">"pojo.User"</span> &gt;</span></span><br><span class="line">    insert into user(id,name,pwd) value (#&#123;id&#125;,#&#123;name&#125;,#&#123;pwd&#125;)</span><br><span class="line"><span class="tag">&lt;/<span class="name">insert</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="4-Delete"><a href="#4-Delete" class="headerlink" title="4.Delete"></a>4.Delete</h3><figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">delete</span> <span class="attr">id</span>=<span class="string">"deleteUser"</span> <span class="attr">parameterType</span>=<span class="string">"int"</span>&gt;</span></span><br><span class="line">    delete from user where id = #&#123;id&#125;</span><br><span class="line"><span class="tag">&lt;/<span class="name">delete</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="5-Update"><a href="#5-Update" class="headerlink" title="5.Update"></a>5.Update</h3><figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">update</span> <span class="attr">id</span>=<span class="string">"updateUser"</span> <span class="attr">parameterType</span>=<span class="string">"pojo.User"</span>&gt;</span></span><br><span class="line">    update user set name=#&#123;name&#125;,pwd=#&#123;pwd&#125;  where id=#&#123;id&#125;</span><br><span class="line"><span class="tag">&lt;/<span class="name">update</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>Mybatis</category>
+      </categories>
+  </entry>
+  <entry>
     <title>2.第一个Mybatis程序</title>
     <url>/2020/02/13/2-%E7%AC%AC%E4%B8%80%E4%B8%AAMybatis%E7%A8%8B%E5%BA%8F/</url>
     <content><![CDATA[<p>思路：环境搭建–&gt;导入Mybatis–&gt;编写代码–&gt;测试！</p>
@@ -47,7 +81,7 @@
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line">org.apache.ibatis.binding.BindingException: Type <span class="class"><span class="keyword">interface</span> <span class="title">com</span>.<span class="title">lwj</span>.<span class="title">dao</span>.<span class="title">UserDao</span> <span class="title">is</span> <span class="title">not</span> <span class="title">known</span> <span class="title">to</span> <span class="title">the</span> <span class="title">MapperRegistry</span>.</span></span><br></pre></td></tr></table></figure>
 
 <p>解决方案：</p>
-<figure class="highlight"><table><tr><td class="code"><pre><span class="line">&lt;!--每一个Mapper.xml都需要在Mybatis核心配置文件中注册！(mybatis-config.xml)--&gt;</span><br><span class="line">&lt;mappers&gt;</span><br><span class="line">    &lt;mapper resource="com/lwj/dao/UserMapper.xml"&gt;&lt;/mapper&gt;</span><br><span class="line">&lt;/mappers&gt;</span><br></pre></td></tr></table></figure>
+<figure class="highlight"><table><tr><td class="code"><pre><span class="line">&lt;!--每一个Mapper.xml都需要在Mybatis核心配置文件中注册！(mybatis-config.xml)--&gt;</span><br><span class="line">&lt;mappers&gt;</span><br><span class="line">    &lt;mapper resource="mapper/UserMapper.xml"&gt;&lt;/mapper&gt;</span><br><span class="line">&lt;/mappers&gt;</span><br></pre></td></tr></table></figure>
 
 <p>注意点2：</p>
 <p>maven由于他的约定大于配置，我们可能会遇到我们写的配置文件，无法被导出或者生效的问题</p>
