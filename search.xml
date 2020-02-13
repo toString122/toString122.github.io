@@ -1,6 +1,82 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>4.配置解析</title>
+    <url>/2020/02/13/4-%E9%85%8D%E7%BD%AE%E8%A7%A3%E6%9E%90/</url>
+    <content><![CDATA[<h3 id="4-1核心配置文件"><a href="#4-1核心配置文件" class="headerlink" title="4.1核心配置文件"></a>4.1核心配置文件</h3><p><strong>在xml中所有的标签都可以规定其顺序</strong></p>
+<ul>
+<li><p>mybatis-config.xml</p>
+</li>
+<li><p>MyBatis 的配置文件包含了会深深影响 MyBatis 行为的设置和属性信息。</p>
+</li>
+<li><pre><code class="xml">configuration（配置）
+properties（属性）
+settings（设置）
+typeAliases（类型别名）
+typeHandlers（类型处理器）
+objectFactory（对象工厂）
+plugins（插件）
+environments（环境配置）
+environment（环境变量）
+transactionManager（事务管理器）
+dataSource（数据源）
+databaseIdProvider（数据库厂商标识）
+mappers（映射器）
+<span class="comment"><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">  </span><br><span class="line"></span><br><span class="line">### 4.2环境配置（environments）</span><br><span class="line"></span><br><span class="line">**尽管可以配置多个环境，但每个 SqlSessionFactory 实例只能选择一种环境。**</span><br><span class="line"></span><br><span class="line">Mybatis默认的事务管理器是JDBC，连接池POOLED</span><br><span class="line"></span><br><span class="line">### 4.3属性（properties）</span><br><span class="line"></span><br><span class="line">我们可以通过properties属性实现引用配置文件</span><br><span class="line"></span><br><span class="line">这些属性都是可外部配置且可动态替换的，既可以在典型的 Java 属性文件中配置，亦可通过 properties 元素的子元素来传递【db.properties】</span><br><span class="line"></span><br><span class="line">编写一个配置文件</span><br><span class="line"></span><br><span class="line">&#96;&#96;&#96;properties</span><br><span class="line">dirver&#x3D;com.mysql.jdbc.Driver</span><br><span class="line">url&#x3D;jdbc:mysql:&#x2F;&#x2F;localhost:3306&#x2F;mybatis_test</span><br><span class="line">username&#x3D;root</span><br><span class="line">password&#x3D;liwenjie</span><br></pre></td></tr></table></figure></span>
+</code></pre>
+</li>
+</ul>
+<p>在核心配置文件中引入</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="comment">&lt;!--引入外部配置文件--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">properties</span> <span class="attr">resource</span>=<span class="string">"db.properties"</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">properties</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>可以直接引用外部文件</li>
+<li>也可以在其中增加一些属性配置</li>
+<li>如果外部和内部配置有相同属性，优先外部配置文件</li>
+</ul>
+<h3 id="4-4类型别名（typeAliases）"><a href="#4-4类型别名（typeAliases）" class="headerlink" title="4.4类型别名（typeAliases）"></a>4.4类型别名（typeAliases）</h3><ul>
+<li>类型别名是为 Java 类型设置一个短的名字。 它只和 XML 配置有关</li>
+<li>存在的意义仅在于用来减少类完全限定名的冗余。</li>
+</ul>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="comment">&lt;!--给实体类起别名--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">typeAliases</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">typeAlias</span> <span class="attr">type</span>=<span class="string">"pojo.User"</span> <span class="attr">alias</span>=<span class="string">"User"</span>&gt;</span><span class="tag">&lt;/<span class="name">typeAlias</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">typeAliases</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>也可以指定一个包名，MyBatis 会在包名下面搜索需要的 Java Bean，比如：</p>
+<p>扫描实体类的包，他的默认别名就是这个类的类名首字母小写。</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">typeAliases</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">package</span> <span class="attr">name</span>=<span class="string">"pojo"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">typeAliases</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>在实体类少的时候使用第一种方式</p>
+<p>如果实体类较多的时候可以考虑第二种。</p>
+<p>第一种的DIY性比较好。</p>
+<p>第三种就是使用注解来建立别名</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Alias</span>(<span class="string">"hello"</span>)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">User</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> id;</span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line">    <span class="keyword">private</span> String pwd;</span><br><span class="line">    ``</span><br></pre></td></tr></table></figure>
+<pre><code><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"> </span><br></pre></td></tr></table></figure></code></pre><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">### 4.5 设置（settings）</span><br><span class="line"></span><br><span class="line">| cacheEnabled             | 全局地开启或关闭配置文件中的所有映射器已经配置的任何缓存。   | true  |</span><br><span class="line">| :----------------------- | ------------------------------------------------------------ | ----- |</span><br><span class="line">| lazyLoadingEnabled       | 延迟加载的全局开关。当开启时，所有关联对象都会延迟加载。 特定关联关系中可通过设置 &#96;fetchType&#96; 属性来覆盖该项的开关状态。 | false |</span><br><span class="line">| mapUnderscoreToCamelCase | 是否开启自动驼峰命名规则（camel case）映射，即从经典数据库列名 A_COLUMN 到经典 Java 属性名 aColumn 的类似映射。 | False |</span><br><span class="line"></span><br><span class="line">&#96;&#96;&#96;xml</span><br><span class="line">一个配置完整的 settings 元素的示例如下：</span><br><span class="line">&lt;settings&gt;</span><br><span class="line">  &lt;setting name&#x3D;&quot;cacheEnabled&quot; value&#x3D;&quot;true&quot;&#x2F;&gt;</span><br><span class="line">  &lt;setting name&#x3D;&quot;lazyLoadingEnabled&quot; value&#x3D;&quot;true&quot;&#x2F;&gt;</span><br><span class="line">  &lt;setting name&#x3D;&quot;multipleResultSetsEnabled&quot; value&#x3D;&quot;true&quot;&#x2F;&gt;</span><br><span class="line">  &lt;setting name&#x3D;&quot;useColumnLabel&quot; value&#x3D;&quot;true&quot;&#x2F;&gt;</span><br><span class="line">  &lt;setting name&#x3D;&quot;useGeneratedKeys&quot; value&#x3D;&quot;false&quot;&#x2F;&gt;</span><br><span class="line">  &lt;setting name&#x3D;&quot;autoMappingBehavior&quot; value&#x3D;&quot;PARTIAL&quot;&#x2F;&gt;</span><br><span class="line">  &lt;setting name&#x3D;&quot;autoMappingUnknownColumnBehavior&quot; value&#x3D;&quot;WARNING&quot;&#x2F;&gt;</span><br><span class="line">  &lt;setting name&#x3D;&quot;defaultExecutorType&quot; value&#x3D;&quot;SIMPLE&quot;&#x2F;&gt;</span><br><span class="line">  &lt;setting name&#x3D;&quot;defaultStatementTimeout&quot; value&#x3D;&quot;25&quot;&#x2F;&gt;</span><br><span class="line">  &lt;setting name&#x3D;&quot;defaultFetchSize&quot; value&#x3D;&quot;100&quot;&#x2F;&gt;</span><br><span class="line">  &lt;setting name&#x3D;&quot;safeRowBoundsEnabled&quot; value&#x3D;&quot;false&quot;&#x2F;&gt;</span><br><span class="line">  &lt;setting name&#x3D;&quot;mapUnderscoreToCamelCase&quot; value&#x3D;&quot;false&quot;&#x2F;&gt;</span><br><span class="line">  &lt;setting name&#x3D;&quot;localCacheScope&quot; value&#x3D;&quot;SESSION&quot;&#x2F;&gt;</span><br><span class="line">  &lt;setting name&#x3D;&quot;jdbcTypeForNull&quot; value&#x3D;&quot;OTHER&quot;&#x2F;&gt;</span><br><span class="line">  &lt;setting name&#x3D;&quot;lazyLoadTriggerMethods&quot; value&#x3D;&quot;equals,clone,hashCode,toString&quot;&#x2F;&gt;</span><br><span class="line">&lt;&#x2F;settings&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-6映射器（mappers）"><a href="#4-6映射器（mappers）" class="headerlink" title="4.6映射器（mappers）"></a>4.6映射器（mappers）</h3><p>既然 MyBatis 的行为已经由上述元素配置完了，我们现在就要定义 SQL 映射语句了。 但是首先我们需要告诉 MyBatis 到哪里去找到这些语句。 Java 在自动查找这方面没有提供一个很好的方法，所以最佳的方式是告诉 MyBatis 到哪里去找映射文件。 你可以使用相对于类路径的资源引用， 或完全限定资源定位符（包括 <code>file:///</code> 的 URL），或类名和包名等。</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 使用相对于类路径的资源引用 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">mappers</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">mapper</span> <span class="attr">resource</span>=<span class="string">"org/mybatis/builder/AuthorMapper.xml"</span>/&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">mapper</span> <span class="attr">resource</span>=<span class="string">"org/mybatis/builder/BlogMapper.xml"</span>/&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">mapper</span> <span class="attr">resource</span>=<span class="string">"org/mybatis/builder/PostMapper.xml"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">mappers</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>只看着一个吧，其他的反正也记不住。。。。</p>
+<h3 id="4-7作用域（Scope）和生命周期"><a href="#4-7作用域（Scope）和生命周期" class="headerlink" title="4.7作用域（Scope）和生命周期"></a>4.7作用域（Scope）和生命周期</h3><h4 id="SqlSessionFactoryBuilder："><a href="#SqlSessionFactoryBuilder：" class="headerlink" title="SqlSessionFactoryBuilder："></a>SqlSessionFactoryBuilder：</h4><ul>
+<li>一旦创建了 SqlSessionFactory，就不再需要它了</li>
+<li><strong>局部</strong>变量</li>
+</ul>
+<h4 id="SqlSessionFactory："><a href="#SqlSessionFactory：" class="headerlink" title="SqlSessionFactory："></a>SqlSessionFactory：</h4><ul>
+<li>说白了就是可以想象为数据库连接池</li>
+<li><strong>一旦被创建就应该在应用的运行期间一直存在，没有任何理由丢弃它或重新创建另一个实例</strong></li>
+<li>因此 SqlSessionFactory 的最佳作用域是应用作用域，<strong>全局</strong></li>
+<li>最简单的就是使用单例模式或者静态单例模式。</li>
+</ul>
+<h4 id="SqlSession"><a href="#SqlSession" class="headerlink" title="SqlSession"></a>SqlSession</h4><ul>
+<li>连接到连接池的一个请求</li>
+<li>开启–&gt;关闭</li>
+<li>线程不安全，不能被共享</li>
+<li>用完赶紧关闭，否则资源被占用</li>
+</ul>
+]]></content>
+      <categories>
+        <category>Mybatis</category>
+      </categories>
+  </entry>
+  <entry>
     <title>3.增删改查</title>
     <url>/2020/02/13/3-%E5%A2%9E%E5%88%A0%E6%94%B9%E6%9F%A5/</url>
     <content><![CDATA[<p><strong><em>注意点：增删改需要提交事务</em></strong></p>
@@ -29,6 +105,30 @@
 
 <h3 id="5-Update"><a href="#5-Update" class="headerlink" title="5.Update"></a>5.Update</h3><figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">update</span> <span class="attr">id</span>=<span class="string">"updateUser"</span> <span class="attr">parameterType</span>=<span class="string">"pojo.User"</span>&gt;</span></span><br><span class="line">    update user set name=#&#123;name&#125;,pwd=#&#123;pwd&#125;  where id=#&#123;id&#125;</span><br><span class="line"><span class="tag">&lt;/<span class="name">update</span>&gt;</span></span><br></pre></td></tr></table></figure>
 
+<h3 id="6-万能Map"><a href="#6-万能Map" class="headerlink" title="6.万能Map"></a>6.万能Map</h3><p>假设我们的实体类或者数据库中的表，字段参数过多，我们应该考虑Map。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//万能Map</span></span><br><span class="line"><span class="function">User <span class="title">addUser2</span><span class="params">(Map&lt;String,Object&gt; map)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line">    <span class="comment">&lt;!--Map--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">insert</span> <span class="attr">id</span>=<span class="string">"addUser2"</span> <span class="attr">parameterType</span>=<span class="string">"map"</span>&gt;</span></span><br><span class="line">/*保证测试类中put的key和这里的对应即可取到值*/</span><br><span class="line">       insert into user(id,name,pwd) value (#&#123;userid&#125;,#&#123;username&#125;,#&#123;userpwd&#125;)</span><br><span class="line">    <span class="tag">&lt;/<span class="name">insert</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test4</span><span class="params">()</span> <span class="keyword">throws</span> Exception</span>&#123;</span><br><span class="line">    String resource = <span class="string">"mybatis-config.xml"</span>;</span><br><span class="line">    InputStream inputStream = Resources.getResourceAsStream(resource);</span><br><span class="line">    SqlSessionFactory sqlSessionFactory = <span class="keyword">new</span> SqlSessionFactoryBuilder().build(inputStream);</span><br><span class="line">    SqlSession session = sqlSessionFactory.openSession();</span><br><span class="line">    Map&lt;String,Object&gt; map =<span class="keyword">new</span> HashMap&lt;String, Object&gt;();</span><br><span class="line">    map.put(<span class="string">"userid"</span>,<span class="string">"123"</span>);</span><br><span class="line">    map.put(<span class="string">"username"</span>,<span class="string">"aaaa"</span>);</span><br><span class="line">    map.put(<span class="string">"userpwd"</span>,<span class="string">"0000"</span>);</span><br><span class="line">    session.insert(<span class="string">"pojo.UserMapper.addUser2"</span>,map);</span><br><span class="line">    session.commit();</span><br><span class="line">    session.close();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Map传递参数，直接在sql中取出key即可</p>
+<p>对象传递参数，直接在sql取出对象属性即可</p>
+<p>只有一个基本数据类型的情况下，可以直接在sql中取到</p>
+<h3 id="7-模糊查询"><a href="#7-模糊查询" class="headerlink" title="7.模糊查询"></a>7.模糊查询</h3><ol>
+<li><p>java代码执行的时候，传递通配符 % %</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">session.selectList(<span class="string">"pojo.UserMapper.getUserLike"</span>,<span class="string">"%李%"</span>)</span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ol>
+<ol start="2">
+<li><p>在sql拼接中使用通配符！</p>
+<figure class="highlight"><table><tr><td class="code"><pre><span class="line">select * from user  where name like "%"#&#123;value&#125;"%"</span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
 ]]></content>
       <categories>
         <category>Mybatis</category>
