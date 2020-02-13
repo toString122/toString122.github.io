@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>Mybatis</title>
-    <url>/2020/02/13/Mybatis%E7%AE%80%E4%BB%8B/</url>
+    <title>1.Mybatis简介</title>
+    <url>/2020/02/13/1.Mybatis%E7%AE%80%E4%BB%8B/</url>
     <content><![CDATA[<p><strong>环境</strong></p>
 <ul>
 <li>JDK1.8</li>
