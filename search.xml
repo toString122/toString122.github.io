@@ -1,6 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>5解决属性名和字段不一致的问题</title>
+    <url>/2020/02/13/5%E8%A7%A3%E5%86%B3%E5%B1%9E%E6%80%A7%E5%90%8D%E5%92%8C%E5%AD%97%E6%AE%B5%E4%B8%8D%E4%B8%80%E8%87%B4%E7%9A%84%E9%97%AE%E9%A2%98/</url>
+    <content><![CDATA[<h3 id="5-1问题"><a href="#5-1问题" class="headerlink" title="5.1问题"></a>5.1问题</h3><p>新建一个模块，拷贝之前源码，测试实体类与数据库字段不一致的情况</p>
+<p><img src="C:%5CUsers%5Cliwen%5CDesktop%5Cblog%5Cblog%5Csource%5Cimages%5CTIM%E6%88%AA%E5%9B%BE20200213203128.bmp" alt=""></p>
+<p>测试出现问题</p>
+<p><img src="C:%5CUsers%5Cliwen%5CDesktop%5Cblog%5Cblog%5Csource%5Cimages%5CTIM%E6%88%AA%E5%9B%BE20200213203644.bmp" alt=""></p>
+<p>解决方法：</p>
+<ul>
+<li><p>起别名</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"> <span class="tag">&lt;<span class="name">select</span> <span class="attr">id</span>=<span class="string">"getUserByID"</span> <span class="attr">resultType</span>=<span class="string">"User"</span> <span class="attr">parameterType</span>=<span class="string">"int"</span>&gt;</span></span><br><span class="line">/* select * from user where id = #&#123;id&#125;*/</span><br><span class="line"> select id,name,psw as password from user where id = #&#123;id&#125;</span><br><span class="line"> <span class="tag">&lt;/<span class="name">select</span>&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>resultMap</p>
+</li>
+</ul>
+<h3 id="5-2resultMap解决问题"><a href="#5-2resultMap解决问题" class="headerlink" title="5.2resultMap解决问题"></a>5.2resultMap解决问题</h3><h4 id="简单结果集映射"><a href="#简单结果集映射" class="headerlink" title="简单结果集映射"></a>简单结果集映射</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line">id name pwd</span><br><span class="line">id name password</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">resultMap</span> <span class="attr">id</span>=<span class="string">"DiyUser"</span> <span class="attr">type</span>=<span class="string">"user"</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!--column 数据库中字段      property实体类中属性--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">result</span> <span class="attr">column</span>=<span class="string">"id"</span> <span class="attr">property</span>=<span class="string">"id"</span>&gt;</span><span class="tag">&lt;/<span class="name">result</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">result</span> <span class="attr">column</span>=<span class="string">"name"</span> <span class="attr">property</span>=<span class="string">"name"</span>&gt;</span><span class="tag">&lt;/<span class="name">result</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">result</span> <span class="attr">column</span>=<span class="string">"pwd"</span> <span class="attr">property</span>=<span class="string">"password"</span>&gt;</span><span class="tag">&lt;/<span class="name">result</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">resultMap</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">select</span> <span class="attr">id</span>=<span class="string">"getUserByID"</span> <span class="attr">resultMap</span>=<span class="string">"DiyUser"</span>&gt;</span></span><br><span class="line">select * from user where id = #&#123;id&#125;</span><br><span class="line"><span class="tag">&lt;/<span class="name">select</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>resultMap</code> 元素是 MyBatis 中最重要最强大的元素。</li>
+<li>ResultMap 的设计思想是，对于简单的语句根本不需要配置显式的结果映射，而对于复杂一点的语句只需要描述它们的关系就行了。</li>
+<li><code>ResultMap</code> 最优秀的地方在于，虽然你已经对它相当了解了，但是根本就不需要显式地用到他们。</li>
+</ul>
+<p><strong><em>如果世界总是这么简单就好了。</em></strong></p>
+]]></content>
+      <categories>
+        <category>Mybatis</category>
+      </categories>
+  </entry>
+  <entry>
     <title>4.配置解析</title>
     <url>/2020/02/13/4-%E9%85%8D%E7%BD%AE%E8%A7%A3%E6%9E%90/</url>
     <content><![CDATA[<h3 id="4-1核心配置文件"><a href="#4-1核心配置文件" class="headerlink" title="4.1核心配置文件"></a>4.1核心配置文件</h3><p><strong>在xml中所有的标签都可以规定其顺序</strong></p>
