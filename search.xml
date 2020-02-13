@@ -4,9 +4,9 @@
     <title>5解决属性名和字段不一致的问题</title>
     <url>/2020/02/13/5%E8%A7%A3%E5%86%B3%E5%B1%9E%E6%80%A7%E5%90%8D%E5%92%8C%E5%AD%97%E6%AE%B5%E4%B8%8D%E4%B8%80%E8%87%B4%E7%9A%84%E9%97%AE%E9%A2%98/</url>
     <content><![CDATA[<h3 id="5-1问题"><a href="#5-1问题" class="headerlink" title="5.1问题"></a>5.1问题</h3><p>新建一个模块，拷贝之前源码，测试实体类与数据库字段不一致的情况</p>
-<p><img src="C:%5CUsers%5Cliwen%5CDesktop%5Cblog%5Cblog%5Csource%5Cimages%5CTIM%E6%88%AA%E5%9B%BE20200213203128.bmp" alt=""></p>
+<p><img src="/images/TIM%E6%88%AA%E5%9B%BE20200213203128.bmp" alt=""></p>
 <p>测试出现问题</p>
-<p><img src="C:%5CUsers%5Cliwen%5CDesktop%5Cblog%5Cblog%5Csource%5Cimages%5CTIM%E6%88%AA%E5%9B%BE20200213203644.bmp" alt=""></p>
+<p><img src="/images/TIM%E6%88%AA%E5%9B%BE20200213203644.bmp" alt=""></p>
 <p>解决方法：</p>
 <ul>
 <li><p>起别名</p>
