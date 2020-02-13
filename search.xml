@@ -1,3 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
+  <entry>
+    <title>测试文章</title>
+    <url>/2020/02/13/%E6%B5%8B%E8%AF%95%E6%96%87%E7%AB%A0/</url>
+    <content><![CDATA[<p>这里是正文了啊<br>下面的看不见了<br>&lt; !–more–&gt;</p>
+<p>这里内容看不见</p>
+]]></content>
+      <categories>
+        <category>后端</category>
+      </categories>
+  </entry>
 </search>
