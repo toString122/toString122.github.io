@@ -1,6 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>1.Spring简介</title>
+    <url>/2020/02/14/1-Spring%E7%AE%80%E4%BB%8B/</url>
+    <content><![CDATA[<h1 id="Spring"><a href="#Spring" class="headerlink" title="Spring"></a>Spring</h1><h3 id="1-1简介"><a href="#1-1简介" class="headerlink" title="1.1简介"></a>1.1简介</h3><ul>
+<li>Spring：春天——–&gt;给软件行业带来了春天</li>
+<li>2002，首次推出了Spring的框架雏形：interface 21框架</li>
+<li>2004 发布Spring1.0版本</li>
+<li>创始人：Rod Johnson  <em>这人竟是音乐学的博士？？不是计算机？？</em></li>
+<li>Spring理念：使现有技术更加容易使用，本身是一个大杂烩</li>
+</ul>
+<!-- nmore -->
+
+<ul>
+<li><p>SSH：Struct2+Spring+Hibernate</p>
+</li>
+<li><p>SSM：SpringMVC + Spring + Mybatis</p>
+</li>
+</ul>
+<p>官方文档：<a href="https://docs.spring.io/spring/docs/5.2.3.RELEASE/spring-framework-reference/overview.html#overview" target="_blank" rel="noopener">https://docs.spring.io/spring/docs/5.2.3.RELEASE/spring-framework-reference/overview.html#overview</a></p>
+<p>官方下载地址：<a href="https://repo.spring.io/release/org/springframework/spring/" target="_blank" rel="noopener">https://repo.spring.io/release/org/springframework/spring/</a></p>
+<p>Github地址：<a href="https://github.com/spring-projects/spring-framework" target="_blank" rel="noopener">https://github.com/spring-projects/spring-framework</a></p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line">在maven仓库中找Spring的时候记得找Spring Web MVC</span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!-- https://mvnrepository.com/artifact/org.springframework/spring-webmvc --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-webmvc<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>5.1.5.RELEASE<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="1-2优点"><a href="#1-2优点" class="headerlink" title="1.2优点"></a>1.2优点</h3><ul>
+<li>Spring是开源的免费的框架（容器）</li>
+<li>轻量级的、非入侵式的框架</li>
+<li><strong>控制反转（IOC）、面向切面（AOP）</strong></li>
+<li>支持事务处理、对框架整合的支持</li>
+</ul>
+<blockquote>
+<p><strong>总结一句话：Spring就是一个轻量级的控制反转和面向切面编程的框架</strong></p>
+</blockquote>
+<h3 id="1-3组成"><a href="#1-3组成" class="headerlink" title="1.3组成"></a>1.3组成</h3><p>七大模块：</p>
+<p><img src="/images/TIM%E6%88%AA%E5%9B%BE20200214141413.bmp" alt=""></p>
+<h3 id="1-4拓展"><a href="#1-4拓展" class="headerlink" title="1.4拓展"></a>1.4拓展</h3><p>现代化的Java开发说白了就是Spring的开发</p>
+<p><img src="/images/TIM%E6%88%AA%E5%9B%BE20200214141641.bmp" alt=""></p>
+<ul>
+<li><p>SpringBoot</p>
+<ul>
+<li>一个快速开发的脚手架</li>
+<li>基于SpringBoot可以快速开发单个微服务</li>
+<li>约定大于配置</li>
+</ul>
+</li>
+<li><p>SpringCloud</p>
+<ul>
+<li>基于Spring Boot实现的</li>
+</ul>
+</li>
+</ul>
+<p>现在大多数公司都在使用Spring Boot进行快速开发，学习SpringBoot的前提，需要完全掌握Spring及SpringMVC！承上启下的作用！</p>
+<p>弊端：发展太久后，违背了原来的理念！配置十分繁琐，人称“配置地狱”!</p>
+]]></content>
+      <categories>
+        <category>Spring</category>
+      </categories>
+  </entry>
+  <entry>
     <title>6.动态SQL</title>
     <url>/2020/02/14/6-%E5%8A%A8%E6%80%81SQL/</url>
     <content><![CDATA[<h3 id="6-什么是动态SQL"><a href="#6-什么是动态SQL" class="headerlink" title="6.什么是动态SQL"></a>6.什么是动态SQL</h3><p>简单说就是根据不同的条件生成不同的SQL语句</p>
