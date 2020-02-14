@@ -1,6 +1,99 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>6.DI依赖注入</title>
+    <url>/2020/02/14/6-DI%E4%BE%9D%E8%B5%96%E6%B3%A8%E5%85%A5/</url>
+    <content><![CDATA[<h1 id="6-DI依赖注入"><a href="#6-DI依赖注入" class="headerlink" title="6.DI依赖注入"></a>6.DI依赖注入</h1><h3 id="6-1构造器注入"><a href="#6-1构造器注入" class="headerlink" title="6.1构造器注入"></a>6.1构造器注入</h3><p>上一章已经说过了。。。。</p>
+<h3 id="6-2Set方式注入【重点】"><a href="#6-2Set方式注入【重点】" class="headerlink" title="6.2Set方式注入【重点】"></a>6.2Set方式注入【重点】</h3><ul>
+<li><p>依赖注入：set注入！</p>
+<ul>
+<li><p>依赖：Bean对象的创建依赖于容器</p>
+</li>
+<li><p>注入：Bean对象中的所有属性由容器来注入！</p>
+<a id="more"></a>
+
+
+</li>
+</ul>
+</li>
+</ul>
+<p>【环境搭建】</p>
+<ol>
+<li><p>复杂类型</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Address</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> String address;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getAddress</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> address;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setAddress</span><span class="params">(String address)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.address = address;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ol>
+<ol start="2">
+<li><p>真实测试对象</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Student</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line">    <span class="keyword">private</span> Address address;</span><br><span class="line">    <span class="keyword">private</span> String[] books;</span><br><span class="line">    <span class="keyword">private</span> List&lt;String&gt; hobbys;</span><br><span class="line">    <span class="keyword">private</span> Map&lt;String,String&gt; card;</span><br><span class="line">    <span class="keyword">private</span> Set&lt;String&gt; games;</span><br><span class="line">    <span class="keyword">private</span> String wife;</span><br><span class="line">    <span class="keyword">private</span> Properties info;</span><br></pre></td></tr></table></figure>
+<pre><code><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"> </span><br></pre></td></tr></table></figure></code></pre><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">3. Beans.xml</span><br><span class="line"></span><br><span class="line">   &#96;&#96;&#96;xml</span><br><span class="line">   &lt;?xml version&#x3D;&quot;1.0&quot; encoding&#x3D;&quot;UTF-8&quot;?&gt;</span><br><span class="line">   &lt;beans xmlns&#x3D;&quot;http:&#x2F;&#x2F;www.springframework.org&#x2F;schema&#x2F;beans&quot;</span><br><span class="line">          xmlns:xsi&#x3D;&quot;http:&#x2F;&#x2F;www.w3.org&#x2F;2001&#x2F;XMLSchema-instance&quot;</span><br><span class="line">          xsi:schemaLocation&#x3D;&quot;http:&#x2F;&#x2F;www.springframework.org&#x2F;schema&#x2F;beans</span><br><span class="line">           https:&#x2F;&#x2F;www.springframework.org&#x2F;schema&#x2F;beans&#x2F;spring-beans.xsd&quot;&gt;</span><br><span class="line">       </span><br><span class="line">       &lt;!--第一种普通值注入，value--&gt;</span><br><span class="line">       &lt;bean name&#x3D;&quot;student&quot; class&#x3D;&quot;com.lwj.pojo.Student&quot;&gt;</span><br><span class="line">           &lt;property name&#x3D;&quot;name&quot; value&#x3D;&quot;张三&quot;&gt;&lt;&#x2F;property&gt;</span><br><span class="line">       &lt;&#x2F;bean&gt;</span><br><span class="line">   </span><br><span class="line">   &lt;&#x2F;beans&gt;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>测试类</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@org</span>.junit.Test</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test1</span><span class="params">()</span></span>&#123;</span><br><span class="line">   ApplicationContext context= <span class="keyword">new</span> ClassPathXmlApplicationContext(<span class="string">"beans.xml"</span>);</span><br><span class="line">   Student student= (Student)context.getBean(<span class="string">"student"</span>);</span><br><span class="line">   System.out.println(<span class="string">"student = "</span> + student.getName());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>完善注入信息</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"address"</span> <span class="attr">class</span>=<span class="string">"com.lwj.pojo.Address"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"address"</span> <span class="attr">value</span>=<span class="string">"山东"</span>&gt;</span><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">bean</span> <span class="attr">name</span>=<span class="string">"student"</span> <span class="attr">class</span>=<span class="string">"com.lwj.pojo.Student"</span>&gt;</span></span><br><span class="line">        <span class="comment">&lt;!--第一种普通值注入，value--&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"name"</span> <span class="attr">value</span>=<span class="string">"张三"</span>&gt;</span><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">        <span class="comment">&lt;!--第二种注入，引用类型--&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"address"</span> <span class="attr">ref</span>=<span class="string">"address"</span>&gt;</span><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">        <span class="comment">&lt;!--第三种 数组--&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"books"</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">array</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">value</span>&gt;</span>水浒<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">value</span>&gt;</span>钢铁是怎样炼成的<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">value</span>&gt;</span>三国演义<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">array</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">        <span class="comment">&lt;!--第四种 list--&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"hobbys"</span> &gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">list</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">value</span>&gt;</span>唱歌<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">value</span>&gt;</span>跳舞<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">list</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">        <span class="comment">&lt;!--第四种 map--&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"card"</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">map</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">entry</span> <span class="attr">key</span>=<span class="string">"身份证"</span> <span class="attr">value</span>=<span class="string">"1212121212"</span>&gt;</span><span class="tag">&lt;/<span class="name">entry</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">entry</span> <span class="attr">key</span>=<span class="string">"银行卡"</span> <span class="attr">value</span>=<span class="string">"22344555555"</span>&gt;</span><span class="tag">&lt;/<span class="name">entry</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">map</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">        <span class="comment">&lt;!--第五种 set--&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"games"</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">set</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">value</span>&gt;</span>csgo<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">value</span>&gt;</span>lol<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">set</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">        <span class="comment">&lt;!--第六种 null--&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"wife"</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">null</span>&gt;</span><span class="tag">&lt;/<span class="name">null</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">        <span class="comment">&lt;!--第七种 properties--&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"info"</span> &gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">props</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">prop</span> <span class="attr">key</span>=<span class="string">"学号"</span>&gt;</span>001<span class="tag">&lt;/<span class="name">prop</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">prop</span> <span class="attr">key</span>=<span class="string">"成绩"</span>&gt;</span>87<span class="tag">&lt;/<span class="name">prop</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">props</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ol>
+]]></content>
+      <categories>
+        <category>Spring</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>5.Spring的配置</title>
+    <url>/2020/02/14/5-Spring%E7%9A%84%E9%85%8D%E7%BD%AE/</url>
+    <content><![CDATA[<h1 id="5-Spring的配置"><a href="#5-Spring的配置" class="headerlink" title="5.Spring的配置"></a>5.Spring的配置</h1><h3 id="5-1别名"><a href="#5-1别名" class="headerlink" title="5.1别名"></a>5.1别名</h3><figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"user"</span> <span class="attr">class</span>=<span class="string">"com.lwj.pojo.User"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"name"</span> <span class="attr">value</span>=<span class="string">"pojo"</span>&gt;</span><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!--property给对象设置初始值--&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">alias</span> <span class="attr">name</span>=<span class="string">"user"</span> <span class="attr">alias</span>=<span class="string">"user2"</span>&gt;</span><span class="tag">&lt;/<span class="name">alias</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<a id="more"></a>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">User user = (User)context.getBean(<span class="string">"user2"</span>);</span><br></pre></td></tr></table></figure>
+
+<p>如果添加了别名，我们可以使用别名获取到这个对象。</p>
+<h3 id="5-2Bean的配置"><a href="#5-2Bean的配置" class="headerlink" title="5.2Bean的配置"></a>5.2Bean的配置</h3><figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="comment">&lt;!--</span></span><br><span class="line"><span class="comment">    id : Bean 的唯一标识符，也就是我们学的对象名</span></span><br><span class="line"><span class="comment">    class ： bean 对象所对应的全限类名</span></span><br><span class="line"><span class="comment">    name ： 也是别名，可以同时取多个别名</span></span><br><span class="line"><span class="comment">--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">class</span>=<span class="string">"com.lwj.pojo.User"</span> <span class="attr">id</span>=<span class="string">"user3"</span> <span class="attr">name</span>=<span class="string">"user4"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"name"</span> <span class="attr">value</span>=<span class="string">"CeShi"</span>&gt;</span><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="5-3import"><a href="#5-3import" class="headerlink" title="5.3import"></a>5.3import</h3><p>这个import一般用于团队开发，它可以将多个配置文件导入合并一个。</p>
+<p>假设，现在项目中有多个人开发，这三个人肤质不同类开发，不同的类需要注册在不同的bean中，我们可以利用import将所有人的beans合并为一个总的！</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">import</span> <span class="attr">resource</span>=<span class="string">"applicationContext.xml"</span>&gt;</span><span class="tag">&lt;/<span class="name">import</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">import</span> <span class="attr">resource</span>=<span class="string">"Beans1.xml"</span>&gt;</span><span class="tag">&lt;/<span class="name">import</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>Spring</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>4.IOC创建对象的方式</title>
+    <url>/2020/02/14/4-IOC%E5%88%9B%E5%BB%BA%E5%AF%B9%E8%B1%A1%E7%9A%84%E6%96%B9%E5%BC%8F/</url>
+    <content><![CDATA[<h1 id="4-IOC创建对象的方式"><a href="#4-IOC创建对象的方式" class="headerlink" title="4.IOC创建对象的方式"></a>4.IOC创建对象的方式</h1><ol>
+<li><p>使用无参构造创建对象，默认</p>
+</li>
+<li><p>假设我们要用有参构造创建对象</p>
+<ol>
+<li><p>下标赋值</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"exampleBean"</span> <span class="attr">class</span>=<span class="string">"examples.ExampleBean"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">constructor-arg</span> <span class="attr">index</span>=<span class="string">"0"</span> <span class="attr">value</span>=<span class="string">"7500000"</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">constructor-arg</span> <span class="attr">index</span>=<span class="string">"1"</span> <span class="attr">value</span>=<span class="string">"42"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>参数类型匹配(不建议使用)</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"exampleBean"</span> <span class="attr">class</span>=<span class="string">"examples.ExampleBean"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">constructor-arg</span> <span class="attr">type</span>=<span class="string">"int"</span> <span class="attr">value</span>=<span class="string">"7500000"</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">constructor-arg</span> <span class="attr">type</span>=<span class="string">"java.lang.String"</span> <span class="attr">value</span>=<span class="string">"42"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ol>
+</li>
+</ol>
+<p>总结：在配置文件加载的时候，容器中的对象就已经初始化了</p>
+]]></content>
+      <categories>
+        <category>Spring</category>
+      </categories>
+  </entry>
+  <entry>
     <title>3.第一个Spring程序</title>
     <url>/2020/02/14/3-%E7%AC%AC%E4%B8%80%E4%B8%AASpring%E7%A8%8B%E5%BA%8F/</url>
     <content><![CDATA[<h1 id="3-第一个Spring程序"><a href="#3-第一个Spring程序" class="headerlink" title="3.第一个Spring程序"></a>3.第一个Spring程序</h1><p>附文档：<a href="https://docs.spring.io/spring/docs/5.2.3.RELEASE/spring-framework-reference/core.html#spring-core" target="_blank" rel="noopener">https://docs.spring.io/spring/docs/5.2.3.RELEASE/spring-framework-reference/core.html#spring-core</a></p>
