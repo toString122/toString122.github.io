@@ -4,6 +4,8 @@
     <title>6.动态SQL</title>
     <url>/2020/02/14/6-%E5%8A%A8%E6%80%81SQL/</url>
     <content><![CDATA[<h3 id="6-什么是动态SQL"><a href="#6-什么是动态SQL" class="headerlink" title="6.什么是动态SQL"></a>6.什么是动态SQL</h3><p>简单说就是根据不同的条件生成不同的SQL语句</p>
+<a id="more"></a>
+
 <figure class="highlight xml"><table><tr><td class="code"><pre><span class="line">动态 SQL 元素和 JSTL 或基于类似 XML 的文本处理器相似。在 MyBatis 之前的版本中，有很多元素需要花时间了解。MyBatis 3 大大精简了元素种类，现在只需学习原来一半的元素便可。MyBatis 采用功能强大的基于 OGNL 的表达式来淘汰其它大部分元素。</span><br><span class="line"></span><br><span class="line">if</span><br><span class="line">choose (when, otherwise)</span><br><span class="line">trim (where, set)</span><br><span class="line">foreach</span><br></pre></td></tr></table></figure>
 
 
@@ -64,6 +66,8 @@
     <url>/2020/02/13/5%E8%A7%A3%E5%86%B3%E5%B1%9E%E6%80%A7%E5%90%8D%E5%92%8C%E5%AD%97%E6%AE%B5%E4%B8%8D%E4%B8%80%E8%87%B4%E7%9A%84%E9%97%AE%E9%A2%98/</url>
     <content><![CDATA[<h3 id="5-1问题"><a href="#5-1问题" class="headerlink" title="5.1问题"></a>5.1问题</h3><p>新建一个模块，拷贝之前源码，测试实体类与数据库字段不一致的情况</p>
 <p><img src="/images/TIM%E6%88%AA%E5%9B%BE20200213203128.bmp" alt=""></p>
+<a id="more"></a>
+
 <p>测试出现问题</p>
 <p><img src="/images/TIM%E6%88%AA%E5%9B%BE20200213203644.bmp" alt=""></p>
 <p>解决方法：</p>
@@ -93,6 +97,8 @@
     <title>4.配置解析</title>
     <url>/2020/02/13/4-%E9%85%8D%E7%BD%AE%E8%A7%A3%E6%9E%90/</url>
     <content><![CDATA[<h3 id="4-1核心配置文件"><a href="#4-1核心配置文件" class="headerlink" title="4.1核心配置文件"></a>4.1核心配置文件</h3><p><strong>在xml中所有的标签都可以规定其顺序</strong></p>
+<a id="more"></a>
+
 <ul>
 <li><p>mybatis-config.xml</p>
 </li>
@@ -137,8 +143,8 @@ mappers（映射器）
 <p>如果实体类较多的时候可以考虑第二种。</p>
 <p>第一种的DIY性比较好。</p>
 <p>第三种就是使用注解来建立别名</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Alias</span>(<span class="string">"hello"</span>)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">User</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> id;</span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line">    <span class="keyword">private</span> String pwd;</span><br><span class="line">    ``</span><br></pre></td></tr></table></figure>
-<pre><code><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"> </span><br></pre></td></tr></table></figure></code></pre><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">### 4.5 设置（settings）</span><br><span class="line"></span><br><span class="line">| cacheEnabled             | 全局地开启或关闭配置文件中的所有映射器已经配置的任何缓存。   | true  |</span><br><span class="line">| :----------------------- | ------------------------------------------------------------ | ----- |</span><br><span class="line">| lazyLoadingEnabled       | 延迟加载的全局开关。当开启时，所有关联对象都会延迟加载。 特定关联关系中可通过设置 &#96;fetchType&#96; 属性来覆盖该项的开关状态。 | false |</span><br><span class="line">| mapUnderscoreToCamelCase | 是否开启自动驼峰命名规则（camel case）映射，即从经典数据库列名 A_COLUMN 到经典 Java 属性名 aColumn 的类似映射。 | False |</span><br><span class="line"></span><br><span class="line">&#96;&#96;&#96;xml</span><br><span class="line">一个配置完整的 settings 元素的示例如下：</span><br><span class="line">&lt;settings&gt;</span><br><span class="line">  &lt;setting name&#x3D;&quot;cacheEnabled&quot; value&#x3D;&quot;true&quot;&#x2F;&gt;</span><br><span class="line">  &lt;setting name&#x3D;&quot;lazyLoadingEnabled&quot; value&#x3D;&quot;true&quot;&#x2F;&gt;</span><br><span class="line">  &lt;setting name&#x3D;&quot;multipleResultSetsEnabled&quot; value&#x3D;&quot;true&quot;&#x2F;&gt;</span><br><span class="line">  &lt;setting name&#x3D;&quot;useColumnLabel&quot; value&#x3D;&quot;true&quot;&#x2F;&gt;</span><br><span class="line">  &lt;setting name&#x3D;&quot;useGeneratedKeys&quot; value&#x3D;&quot;false&quot;&#x2F;&gt;</span><br><span class="line">  &lt;setting name&#x3D;&quot;autoMappingBehavior&quot; value&#x3D;&quot;PARTIAL&quot;&#x2F;&gt;</span><br><span class="line">  &lt;setting name&#x3D;&quot;autoMappingUnknownColumnBehavior&quot; value&#x3D;&quot;WARNING&quot;&#x2F;&gt;</span><br><span class="line">  &lt;setting name&#x3D;&quot;defaultExecutorType&quot; value&#x3D;&quot;SIMPLE&quot;&#x2F;&gt;</span><br><span class="line">  &lt;setting name&#x3D;&quot;defaultStatementTimeout&quot; value&#x3D;&quot;25&quot;&#x2F;&gt;</span><br><span class="line">  &lt;setting name&#x3D;&quot;defaultFetchSize&quot; value&#x3D;&quot;100&quot;&#x2F;&gt;</span><br><span class="line">  &lt;setting name&#x3D;&quot;safeRowBoundsEnabled&quot; value&#x3D;&quot;false&quot;&#x2F;&gt;</span><br><span class="line">  &lt;setting name&#x3D;&quot;mapUnderscoreToCamelCase&quot; value&#x3D;&quot;false&quot;&#x2F;&gt;</span><br><span class="line">  &lt;setting name&#x3D;&quot;localCacheScope&quot; value&#x3D;&quot;SESSION&quot;&#x2F;&gt;</span><br><span class="line">  &lt;setting name&#x3D;&quot;jdbcTypeForNull&quot; value&#x3D;&quot;OTHER&quot;&#x2F;&gt;</span><br><span class="line">  &lt;setting name&#x3D;&quot;lazyLoadTriggerMethods&quot; value&#x3D;&quot;equals,clone,hashCode,toString&quot;&#x2F;&gt;</span><br><span class="line">&lt;&#x2F;settings&gt;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Alias</span>(<span class="string">"hello"</span>)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">User</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> id;</span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line">    <span class="keyword">private</span> String pwd;</span><br><span class="line">``</span><br></pre></td></tr></table></figure>
+<pre><code><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"> </span><br></pre></td></tr></table></figure></code></pre><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">### 4.5 设置（settings）</span><br><span class="line"></span><br><span class="line">| cacheEnabled             | 全局地开启或关闭配置文件中的所有映射器已经配置的任何缓存。   | true  |</span><br><span class="line">| :----------------------- | ------------------------------------------------------------ | ----- |</span><br><span class="line">| lazyLoadingEnabled       | 延迟加载的全局开关。当开启时，所有关联对象都会延迟加载。 特定关联关系中可通过设置 &#96;fetchType&#96; 属性来覆盖该项的开关状态。 | false |</span><br><span class="line">| mapUnderscoreToCamelCase | 是否开启自动驼峰命名规则（camel case）映射，即从经典数据库列名 A_COLUMN 到经典 Java 属性名 aColumn 的类似映射。 | False |</span><br><span class="line"></span><br><span class="line">​&#96;&#96;&#96;xml</span><br><span class="line">一个配置完整的 settings 元素的示例如下：</span><br><span class="line">&lt;settings&gt;</span><br><span class="line">  &lt;setting name&#x3D;&quot;cacheEnabled&quot; value&#x3D;&quot;true&quot;&#x2F;&gt;</span><br><span class="line">  &lt;setting name&#x3D;&quot;lazyLoadingEnabled&quot; value&#x3D;&quot;true&quot;&#x2F;&gt;</span><br><span class="line">  &lt;setting name&#x3D;&quot;multipleResultSetsEnabled&quot; value&#x3D;&quot;true&quot;&#x2F;&gt;</span><br><span class="line">  &lt;setting name&#x3D;&quot;useColumnLabel&quot; value&#x3D;&quot;true&quot;&#x2F;&gt;</span><br><span class="line">  &lt;setting name&#x3D;&quot;useGeneratedKeys&quot; value&#x3D;&quot;false&quot;&#x2F;&gt;</span><br><span class="line">  &lt;setting name&#x3D;&quot;autoMappingBehavior&quot; value&#x3D;&quot;PARTIAL&quot;&#x2F;&gt;</span><br><span class="line">  &lt;setting name&#x3D;&quot;autoMappingUnknownColumnBehavior&quot; value&#x3D;&quot;WARNING&quot;&#x2F;&gt;</span><br><span class="line">  &lt;setting name&#x3D;&quot;defaultExecutorType&quot; value&#x3D;&quot;SIMPLE&quot;&#x2F;&gt;</span><br><span class="line">  &lt;setting name&#x3D;&quot;defaultStatementTimeout&quot; value&#x3D;&quot;25&quot;&#x2F;&gt;</span><br><span class="line">  &lt;setting name&#x3D;&quot;defaultFetchSize&quot; value&#x3D;&quot;100&quot;&#x2F;&gt;</span><br><span class="line">  &lt;setting name&#x3D;&quot;safeRowBoundsEnabled&quot; value&#x3D;&quot;false&quot;&#x2F;&gt;</span><br><span class="line">  &lt;setting name&#x3D;&quot;mapUnderscoreToCamelCase&quot; value&#x3D;&quot;false&quot;&#x2F;&gt;</span><br><span class="line">  &lt;setting name&#x3D;&quot;localCacheScope&quot; value&#x3D;&quot;SESSION&quot;&#x2F;&gt;</span><br><span class="line">  &lt;setting name&#x3D;&quot;jdbcTypeForNull&quot; value&#x3D;&quot;OTHER&quot;&#x2F;&gt;</span><br><span class="line">  &lt;setting name&#x3D;&quot;lazyLoadTriggerMethods&quot; value&#x3D;&quot;equals,clone,hashCode,toString&quot;&#x2F;&gt;</span><br><span class="line">&lt;&#x2F;settings&gt;</span><br></pre></td></tr></table></figure>
 
 <h3 id="4-6映射器（mappers）"><a href="#4-6映射器（mappers）" class="headerlink" title="4.6映射器（mappers）"></a>4.6映射器（mappers）</h3><p>既然 MyBatis 的行为已经由上述元素配置完了，我们现在就要定义 SQL 映射语句了。 但是首先我们需要告诉 MyBatis 到哪里去找到这些语句。 Java 在自动查找这方面没有提供一个很好的方法，所以最佳的方式是告诉 MyBatis 到哪里去找映射文件。 你可以使用相对于类路径的资源引用， 或完全限定资源定位符（包括 <code>file:///</code> 的 URL），或类名和包名等。</p>
 <figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 使用相对于类路径的资源引用 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">mappers</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">mapper</span> <span class="attr">resource</span>=<span class="string">"org/mybatis/builder/AuthorMapper.xml"</span>/&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">mapper</span> <span class="attr">resource</span>=<span class="string">"org/mybatis/builder/BlogMapper.xml"</span>/&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">mapper</span> <span class="attr">resource</span>=<span class="string">"org/mybatis/builder/PostMapper.xml"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">mappers</span>&gt;</span></span><br></pre></td></tr></table></figure>
@@ -172,9 +178,13 @@ mappers（映射器）
 <h3 id="1-namespace"><a href="#1-namespace" class="headerlink" title="1.namespace"></a>1.namespace</h3><p>namespace中包名要和Dao/Mapper接口包名一致</p>
 <h3 id="2-select"><a href="#2-select" class="headerlink" title="2.select"></a>2.select</h3><p>查询语句；</p>
 <ul>
-<li>id：就是对应的namespace中的方法名</li>
-<li>resultType：SQL语句的返回值</li>
-<li>parameType：参数类型</li>
+<li><p>id：就是对应的namespace中的方法名</p>
+</li>
+<li><p>resultType：SQL语句的返回值</p>
+</li>
+<li><p>parameType：参数类型</p>
+<a id="more"></a>
+</li>
 </ul>
 <ol>
 <li><p>编写接口</p>
@@ -228,6 +238,8 @@ mappers（映射器）
     <url>/2020/02/13/2-%E7%AC%AC%E4%B8%80%E4%B8%AAMybatis%E7%A8%8B%E5%BA%8F/</url>
     <content><![CDATA[<p>思路：环境搭建–&gt;导入Mybatis–&gt;编写代码–&gt;测试！</p>
 <p>参考官方文档入门<a href="https://mybatis.org/mybatis-3/zh/getting-started.html" target="_blank" rel="noopener">https://mybatis.org/mybatis-3/zh/getting-started.html</a></p>
+<a id="more"></a>
+
 <h3 id="2-1搭建环境"><a href="#2-1搭建环境" class="headerlink" title="2.1搭建环境"></a>2.1搭建环境</h3><p>1.搭建数据库</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function">create table <span class="title">user</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">	id <span class="keyword">int</span>(<span class="number">20</span>)</span> not <span class="keyword">null</span>,</span></span><br><span class="line"><span class="function">	name <span class="title">VARCHAR</span><span class="params">(<span class="number">30</span>)</span> DEFAULT NULL,</span></span><br><span class="line"><span class="function">	pwd <span class="title">VARCHAR</span><span class="params">(<span class="number">30</span>)</span> DEFAULT NULL,</span></span><br><span class="line"><span class="function">	PRIMARY <span class="title">KEY</span><span class="params">(id)</span></span></span><br><span class="line"><span class="function">	)</span>;</span><br><span class="line">	</span><br><span class="line">	<span class="function">INSERT INTO <span class="title">USER</span><span class="params">(id,name,pwd)</span> VALUES</span></span><br><span class="line"><span class="function">	<span class="params">(<span class="number">1</span>,<span class="string">'张三'</span>,<span class="string">'123456'</span>)</span>,</span></span><br><span class="line"><span class="function">	<span class="params">(<span class="number">2</span>,<span class="string">'李四'</span>,<span class="string">'123123'</span>)</span>,</span></span><br><span class="line"><span class="function">	<span class="params">(<span class="number">3</span>,<span class="string">'王五'</span>,<span class="string">'009090'</span>)</span></span></span><br></pre></td></tr></table></figure>
 
@@ -312,6 +324,8 @@ mappers（映射器）
 </ul>
 <p><strong>框架</strong>：配置文件。最好的方式就是看官网文档</p>
 <h1 id="1-简介"><a href="#1-简介" class="headerlink" title="1.简介"></a>1.简介</h1><p><img src="/images/image-20200213122746371.png" alt="image-20200213122746371"></p>
+<a id="more"></a>
+
 <ul>
 <li>MyBatis 是一款优秀的<strong>持久层框架</strong>。</li>
 <li>它支持定制化 SQL、存储过程以及高级映射。</li>
@@ -375,6 +389,8 @@ mappers（映射器）
 <p>AJAX 不是新的编程语言，而是一种使用现有标准的新方法。</p>
 <p>AJAX 是与服务器交换数据并更新部分网页的艺术，在不重新加载整个页面的情况下。</p>
 <p>简而言之就是一种页面无刷新技术</p>
+<a id="more"></a>
+
 <h2 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h2><ol>
 <li><p>搜索框</p>
 <p>输入部分内容与服务器交互自动补全余下内容</p>
