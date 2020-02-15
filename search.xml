@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>随笔</title>
+    <url>/2020/02/15/%E9%9A%8F%E7%AC%94/</url>
+    <content><![CDATA[<h2 id="2020年2月15号"><a href="#2020年2月15号" class="headerlink" title="2020年2月15号"></a><code>2020年2月15号</code></h2><p>第一篇随笔</p>
+]]></content>
+      <categories>
+        <category>随笔</category>
+      </categories>
+  </entry>
+  <entry>
     <title>7.Bean的自动装配</title>
     <url>/2020/02/15/7-Bean%E7%9A%84%E8%87%AA%E5%8A%A8%E8%A3%85%E9%85%8D/</url>
     <content><![CDATA[<h1 id="7-Bean的自动装配"><a href="#7-Bean的自动装配" class="headerlink" title="7.Bean的自动装配"></a>7.Bean的自动装配</h1><ul>
