@@ -1,6 +1,110 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>9.使用Java的方式配置Spring</title>
+    <url>/2020/02/15/9-%E4%BD%BF%E7%94%A8Java%E7%9A%84%E6%96%B9%E5%BC%8F%E9%85%8D%E7%BD%AESpring/</url>
+    <content><![CDATA[<h1 id="9-使用Java的方式配置Spring"><a href="#9-使用Java的方式配置Spring" class="headerlink" title="9.使用Java的方式配置Spring"></a>9.使用Java的方式配置Spring</h1><p>我们现在要完全不适应Spring的xml配置了，全权交给Java来做</p>
+<p>JavaConfig睡是Spring的一个子项目，在Spring4之后成为了一个核心功能</p>
+<a id="more"></a>
+<p>实体类：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> com.lwj.pojo;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.springframework.beans.factory.annotation.Value;</span><br><span class="line"><span class="keyword">import</span> org.springframework.stereotype.Component;</span><br><span class="line"><span class="comment">//这里这个注解的意思就是说明这个类被Spring接管了，注册到了容器中</span></span><br><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">User</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Value</span>(<span class="string">"张三"</span>)</span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getName</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setName</span><span class="params">(String name)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.name = name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"User&#123;"</span> +</span><br><span class="line">                <span class="string">"name='"</span> + name + <span class="string">'\''</span> +</span><br><span class="line">                <span class="string">'&#125;'</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>配置类：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> com.lwj.config;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> com.lwj.pojo.User;</span><br><span class="line"><span class="keyword">import</span> org.springframework.context.annotation.Bean;</span><br><span class="line"><span class="keyword">import</span> org.springframework.context.annotation.ComponentScan;</span><br><span class="line"><span class="keyword">import</span> org.springframework.context.annotation.Configuration;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Configuration</span>  <span class="comment">//这个也会被Spring接管，注册到容器中，因为他本来也是一个Component，</span></span><br><span class="line"><span class="comment">// Configuration代表这是一个配置类，就和我们之前看的xml是一样的</span></span><br><span class="line"><span class="meta">@ComponentScan</span>(<span class="string">"com.lwj"</span>)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyConfig</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//注册一个Bean，就相当于我们之前写的一个bean标签</span></span><br><span class="line">    <span class="comment">//这个方法的名字，就相当于bean的id</span></span><br><span class="line">    <span class="comment">//返回值就相当于bean标签的class</span></span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> User <span class="title">getUser</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> User();<span class="comment">//返回要注入到bean的对象</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>测试类</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> com.lwj.config.MyConfig;</span><br><span class="line"><span class="keyword">import</span> com.lwj.pojo.User;</span><br><span class="line"><span class="keyword">import</span> org.springframework.context.ApplicationContext;</span><br><span class="line"><span class="keyword">import</span> org.springframework.context.annotation.AnnotationConfigApplicationContext;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span> </span>&#123;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="meta">@org</span>.junit.Test</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test1</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="comment">//如果完全无使用了配置类去做，</span></span><br><span class="line">        <span class="comment">// 我们就只能通过AnnotationConfigApplicationContext 上下文获取容器</span></span><br><span class="line">       ApplicationContext context = <span class="keyword">new</span> AnnotationConfigApplicationContext(MyConfig<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">       User user = (User) context.getBean(<span class="string">"getUser"</span>);</span><br><span class="line">        System.out.println(user.getName());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这种Java配置方式，在Spring Boot中随处可见！</p>
+]]></content>
+      <categories>
+        <category>Spring</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>8.使用注解开发</title>
+    <url>/2020/02/15/8-%E4%BD%BF%E7%94%A8%E6%B3%A8%E8%A7%A3%E5%BC%80%E5%8F%91/</url>
+    <content><![CDATA[<h1 id="8-使用注解开发"><a href="#8-使用注解开发" class="headerlink" title="8.使用注解开发"></a>8.使用注解开发</h1><p>在Spring4之后，要使用注解开发，必须保证aop的包导入了</p>
+<a id="more"></a>
+
+<p><img src="/images/TIM%E6%88%AA%E5%9B%BE20200215143359.jpg" alt=""></p>
+<p>使用注解需要导入context约束，增加注解的支持！</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">beans</span> <span class="attr">xmlns</span>=<span class="string">"http://www.springframework.org/schema/beans"</span></span></span><br><span class="line"><span class="tag">       <span class="attr">xmlns:xsi</span>=<span class="string">"http://www.w3.org/2001/XMLSchema-instance"</span></span></span><br><span class="line"><span class="tag">       <span class="attr">xmlns:context</span>=<span class="string">"http://www.springframework.org/schema/context"</span></span></span><br><span class="line"><span class="tag">       <span class="attr">xsi:schemaLocation</span>=<span class="string">"http://www.springframework.org/schema/beans</span></span></span><br><span class="line"><span class="tag"><span class="string">        https://www.springframework.org/schema/beans/spring-beans.xsd</span></span></span><br><span class="line"><span class="tag"><span class="string">        http://www.springframework.org/schema/context</span></span></span><br><span class="line"><span class="tag"><span class="string">        https://www.springframework.org/schema/context/spring-context.xsd"</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    </span><br><span class="line">    <span class="tag">&lt;<span class="name">context:annotation-config</span>/&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">beans</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+
+
+<ol>
+<li><p>bean</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//组件</span></span><br><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">User</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> String name =<span class="string">"张三"</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ol>
+<ol start="2">
+<li><p>属性如何让注入</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">User</span> </span>&#123;</span><br><span class="line">    <span class="comment">//相当于xml中的&lt;property&gt;标签</span></span><br><span class="line">    <span class="meta">@Value</span>(<span class="string">"张三"</span>)</span><br><span class="line">    <span class="keyword">public</span> String name;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ol>
+<ol start="3">
+<li><p>衍生的注解</p>
+<p>@Component有几个衍生注解，我们在web开发中，会按照MVC三层架构分层！</p>
+<ul>
+<li><p>Dao【@Repository】</p>
+</li>
+<li><p>Service【@Service】</p>
+</li>
+<li><p>Controller【@Controller】</p>
+<p>这四个功能都是一样的，大批是代表将某个类注册到Spring中，装配Bean。</p>
+</li>
+</ul>
+</li>
+<li><p>自动装配</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line">@Autowrided</span><br><span class="line">@Nullable  字段标记了这个注解，说明这个字段可以为null</span><br><span class="line">@Resource</span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ol>
+<ol start="5">
+<li><p>作用域</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line"><span class="meta">@Repository</span></span><br><span class="line"><span class="meta">@Scope</span>(<span class="string">"singleton"</span>)<span class="comment">//单例</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">UserDao</span> </span>&#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ol>
+<ol start="6">
+<li><p>小结</p>
+<p>xml与注解：</p>
+<ul>
+<li><p>xml更加万能，适用于任何场合，维护简单，方便</p>
+</li>
+<li><p>注解  不是自己的类使用不了，维护相对复杂！</p>
+</li>
+</ul>
+</li>
+</ol>
+<p>xml与注解的最佳实践：</p>
+<ul>
+<li><p>xml用来管理Bean</p>
+</li>
+<li><p>注解只负责完成属性的注入</p>
+</li>
+<li><p>我们在使用的过程中只需要注意一个问题：必须让注解生效，就需要开启注解的支持。</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"> <span class="comment">&lt;!--指定要扫描的包，这个包下的注解就会生效--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">context:component-scan</span> <span class="attr">base-package</span>=<span class="string">"com.lwj"</span>&gt;</span><span class="tag">&lt;/<span class="name">context:component-scan</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">context:annotation-config</span>/&gt;</span></span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+]]></content>
+      <categories>
+        <category>Spring</category>
+      </categories>
+  </entry>
+  <entry>
     <title>随笔</title>
     <url>/2020/02/15/%E9%9A%8F%E7%AC%94/</url>
     <content><![CDATA[<p>从前有一个程序员，他得到了一盏神灯。</p>
