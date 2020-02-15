@@ -1,10 +1,164 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>11.AOP</title>
+    <url>/2020/02/15/11-AOP/</url>
+    <content><![CDATA[<h1 id="11-AOP"><a href="#11-AOP" class="headerlink" title="11.AOP"></a>11.AOP</h1><h3 id="11-1什么是AOP"><a href="#11-1什么是AOP" class="headerlink" title="11.1什么是AOP"></a>11.1什么是AOP</h3><p>在软件业，AOP为Aspect Oriented Programming的缩写，意为：<a href="https://baike.baidu.com/item/面向切面编程/6016335" target="_blank" rel="noopener">面向切面编程</a>，通过<a href="https://baike.baidu.com/item/预编译/3191547" target="_blank" rel="noopener">预编译</a>方式和运行期间动态代理实现程序功能的统一维护的一种技术。AOP是<a href="https://baike.baidu.com/item/OOP" target="_blank" rel="noopener">OOP</a>的延续，是软件开发中的一个热点，也是<a href="https://baike.baidu.com/item/Spring" target="_blank" rel="noopener">Spring</a>框架中的一个重要内容，是<a href="https://baike.baidu.com/item/函数式编程/4035031" target="_blank" rel="noopener">函数式编程</a>的一种衍生范型。利用AOP可以对业务逻辑的各个部分进行隔离，从而使得业务逻辑各部分之间的<a href="https://baike.baidu.com/item/耦合度/2603938" target="_blank" rel="noopener">耦合度</a>降低，提高程序的可重用性，同时提高了开发的效率。</p>
+<a id="more"></a>
+
+<p><img src="/images/TIM%E6%88%AA%E5%9B%BE20200215212742.jpg" alt=""></p>
+<h3 id="11-2Aop在Spring中的作用"><a href="#11-2Aop在Spring中的作用" class="headerlink" title="11.2Aop在Spring中的作用"></a>11.2Aop在Spring中的作用</h3><p><strong>提供声明式事务；允许用户自定义切面</strong></p>
+<ul>
+<li>横切关注点：跨越应用程序多个模块的方法或功能。即是，与我们业务逻辑无关的，但是我们需要关注的部分，就是横切关注点。如日志 , 安全 , 缓存 , 事务等等 ….</li>
+<li>切面（ASPECT）：横切关注点 被模块化 的特殊对象。即，它是一个类。</li>
+<li>通知（Advice）：切面必须要完成的工作。即，它是类中的一个方法。</li>
+<li>目标（Target）：被通知对象。</li>
+<li>代理（Proxy）：向目标对象应用通知之后创建的对象。</li>
+<li>切入点（PointCut）：切面通知 执行的 “地点”的定义。</li>
+<li>连接点（JointPoint）：与切入点匹配的执行点。</li>
+</ul>
+<p><img src="/images/TIM%E6%88%AA%E5%9B%BE20200215212933.jpg" alt=""></p>
+<p>SpringAOP中，通过Advice定义横切逻辑，Spring中支持5种类型的Advice:</p>
+<p><img src="/images/TIM%E6%88%AA%E5%9B%BE20200215213235.jpg" alt=""></p>
+<p>即AOP在不改变原有代码的情况下，去增加新的功能。</p>
+<h3 id="11-3使用Spring实现AOP"><a href="#11-3使用Spring实现AOP" class="headerlink" title="11.3使用Spring实现AOP"></a>11.3使用Spring实现AOP</h3><p>【重点】使用AOP织入，需要导入一个依赖包</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="comment">&lt;!-- https://mvnrepository.com/artifact/org.aspectj/aspectjweaver --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.aspectj<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>aspectjweaver<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.9.2<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p>方式一:使用Spring的接口</p>
+<ol>
+<li><p>编写我们的业务接口和实现类</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">UserService</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">add</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">delete</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">update</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">select</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UserServiceImpl</span> <span class="keyword">implements</span> <span class="title">UserService</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">add</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"增加了一个用户"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">delete</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"删除了一个用户"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">update</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"更新了一个用户"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">select</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"查询了一个用户"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>写我们的增强类 , 我们编写两个 , 一个前置增强 一个后置增强</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">AfterLog</span> <span class="keyword">implements</span> <span class="title">AfterReturningAdvice</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">afterReturning</span><span class="params">(Object o, Method method, Object[] objects, Object o1)</span> <span class="keyword">throws</span> Throwable </span>&#123;</span><br><span class="line">        System.out.println(method.getName()+<span class="string">"执行后，返回结果为"</span>+o);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Log</span> <span class="keyword">implements</span> <span class="title">MethodBeforeAdvice</span> </span>&#123;</span><br><span class="line">    <span class="comment">//method:要执行的目标方法</span></span><br><span class="line">    <span class="comment">//object：参数</span></span><br><span class="line">    <span class="comment">//o ：目标对象</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">before</span><span class="params">(Method method, Object[] objects, Object o)</span> <span class="keyword">throws</span> Throwable </span>&#123;</span><br><span class="line">        System.out.println(o.getClass().getName()+<span class="string">"的"</span>+method.getName()+<span class="string">"被执行了"</span>);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>最后去spring的文件中注册 , 并实现aop切入实现 , 注意导入约束 .</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">beans</span> <span class="attr">xmlns</span>=<span class="string">"http://www.springframework.org/schema/beans"</span></span></span><br><span class="line"><span class="tag">       <span class="attr">xmlns:xsi</span>=<span class="string">"http://www.w3.org/2001/XMLSchema-instance"</span></span></span><br><span class="line"><span class="tag">       <span class="attr">xmlns:aop</span>=<span class="string">"http://www.springframework.org/schema/aop"</span></span></span><br><span class="line"><span class="tag">       <span class="attr">xsi:schemaLocation</span>=<span class="string">"http://www.springframework.org/schema/beans</span></span></span><br><span class="line"><span class="tag"><span class="string">        https://www.springframework.org/schema/beans/spring-beans.xsd</span></span></span><br><span class="line"><span class="tag"><span class="string">        http://www.springframework.org/schema/aop</span></span></span><br><span class="line"><span class="tag"><span class="string">        https://www.springframework.org/schema/aop/spring-aop.xsd"</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">&lt;!--注册bean--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"userService"</span> <span class="attr">class</span>=<span class="string">"com.lwj.service.UserServiceImpl"</span>&gt;</span><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"log"</span> <span class="attr">class</span>=<span class="string">"com.lwj.log.Log"</span>&gt;</span><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"afterLog"</span> <span class="attr">class</span>=<span class="string">"com.lwj.log.AfterLog"</span>&gt;</span><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!--方式一：使用原生spring接口--&gt;</span></span><br><span class="line">    <span class="comment">&lt;!--配置aop 导入aop约束--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">aop:config</span>&gt;</span></span><br><span class="line">        <span class="comment">&lt;!--切入点  execution:要执行的位置--&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">aop:pointcut</span> <span class="attr">id</span>=<span class="string">"pointcut"</span> <span class="attr">expression</span>=<span class="string">"execution(* com.lwj.service.UserServiceImpl.*(..))"</span>/&gt;</span></span><br><span class="line">        <span class="comment">&lt;!--执行环绕增强--&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">aop:advisor</span> <span class="attr">advice-ref</span>=<span class="string">"log"</span> <span class="attr">pointcut-ref</span>=<span class="string">"pointcut"</span>&gt;</span><span class="tag">&lt;/<span class="name">aop:advisor</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">aop:advisor</span> <span class="attr">advice-ref</span>=<span class="string">"afterLog"</span> <span class="attr">pointcut-ref</span>=<span class="string">"pointcut"</span>&gt;</span><span class="tag">&lt;/<span class="name">aop:advisor</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">aop:config</span>&gt;</span></span><br><span class="line">    </span><br><span class="line"><span class="tag">&lt;/<span class="name">beans</span>&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>测试</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">    ApplicationContext context= <span class="keyword">new</span> ClassPathXmlApplicationContext(<span class="string">"applicationContext.xml"</span>);</span><br><span class="line">    <span class="comment">//动态代理的是接口</span></span><br><span class="line">    UserService userService=(UserService) context.getBean(<span class="string">"userService"</span>);</span><br><span class="line">    userService.add();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Aop的重要性 : 很重要 . 一定要理解其中的思路 , 主要是思想的理解这一块 .</p>
+<p>Spring的Aop就是将公共的业务 (日志 , 安全等) 和领域业务结合起来 , 当执行领域业务时 , 将会把公共业务加进来 . 实现公共业务的重复利用 . 领域业务更纯粹 , 程序猿专注领域业务 , 其本质还是动态代理 .</p>
+</li>
+</ol>
+]]></content>
+      <categories>
+        <category>Spring</category>
+      </categories>
+      <tags>
+        <tag>AOP</tag>
+        <tag>Spring</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>10.代理模式</title>
+    <url>/2020/02/15/10-%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/</url>
+    <content><![CDATA[<h1 id="10-代理模式"><a href="#10-代理模式" class="headerlink" title="10.代理模式"></a>10.代理模式</h1><p>为什么要学习代理模式？因为这就是SpringAOP的底层！【SpringAOP和SpringMVC】</p>
+<p>代理模式分类：</p>
+<ul>
+<li><p>静态代理</p>
+</li>
+<li><p>动态代理</p>
+<a id="more"></a>
+<h3 id="10-1静态代理"><a href="#10-1静态代理" class="headerlink" title="10.1静态代理"></a>10.1静态代理</h3></li>
+<li><p>抽象角色：一般会使用接口或者抽象类类解决</p>
+</li>
+<li><p>真实角色：被代理的角色</p>
+</li>
+<li><p>代理角色：代理真实角色，代理真实角色后会做一些附属操作</p>
+</li>
+<li><p>客户：访问代理对象的人</p>
+</li>
+</ul>
+<p>代码步骤：</p>
+<ol>
+<li><p>接口</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> com.lwj.demo01;</span><br><span class="line"><span class="comment">//租房</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Rent</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span>  <span class="keyword">void</span>  <span class="title">rent</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>真实角色</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> com.lwj.demo01;</span><br><span class="line"><span class="comment">//房东</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Host</span> <span class="keyword">implements</span> <span class="title">Rent</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">rent</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"房东要出租房子"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>代理角色</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> com.lwj.demo01;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Proxy</span> <span class="keyword">implements</span> <span class="title">Rent</span></span>&#123;</span><br><span class="line">    <span class="keyword">private</span> Host host;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Proxy</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Proxy</span><span class="params">(Host host)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.host = host;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//重写的公有方法</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">rent</span><span class="params">()</span> </span>&#123;</span><br><span class="line">         fare();</span><br><span class="line">        seeHouse();</span><br><span class="line">        host.rent();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//看房</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">seeHouse</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"中介带你看房子"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//收中介费</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">fare</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"收中介费"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ol>
+<ol start="4">
+<li>客户端访问代理角色</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> com.lwj.demo01;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Client</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//房东要租房子</span></span><br><span class="line">        Host host = <span class="keyword">new</span> Host();</span><br><span class="line">        <span class="comment">//代理,中介帮房东租房子，中介其中还有一些附属操作</span></span><br><span class="line">        Proxy proxy= <span class="keyword">new</span> Proxy(host);</span><br><span class="line">        <span class="comment">//你不用面对房东，直接找中介就行了</span></span><br><span class="line">        proxy.rent();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>代理模式的优点：</p>
+<ul>
+<li>可以是真实角色的操作更加纯粹，不用去关注太多公共业务!</li>
+<li>公共也就交给代理角色！实现了业务的分工！</li>
+<li>公共业务发生扩展的时候，方便集中管理！</li>
+</ul>
+<p>代理模式缺点：</p>
+<ul>
+<li>一个真实角色就会产生一个代理角色；代码量会翻倍，开发效率变低</li>
+</ul>
+<h3 id="10-2加深理解静态代理"><a href="#10-2加深理解静态代理" class="headerlink" title="10.2加深理解静态代理"></a>10.2加深理解静态代理</h3><p><strong>在不改动原有代码的基础上增加日志功能</strong></p>
+<p>(在方法调用之前输出方法名)</p>
+<ol>
+<li><p>接口</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">UserService</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">add</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">delete</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">update</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">query</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>实现类（原有代码）</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//真实的对象</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UserServiceImpl</span> <span class="keyword">implements</span> <span class="title">UserService</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">add</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"增加了一个用户"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">delete</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"删除了一个用户"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">update</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"修改了一个用户"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">query</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"查询了一个用户"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//1.改动原有的业务代码，在公司中是大忌</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>代理类</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UserServiceProxy</span> <span class="keyword">implements</span> <span class="title">UserService</span></span>&#123;</span><br><span class="line">    UserServiceImpl userService;<span class="comment">//首先把真实对象拿过来</span></span><br><span class="line">    </span><br><span class="line">	<span class="comment">//推荐使用set方法，不建议使用构造方法</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setUserService</span><span class="params">(UserServiceImpl userService)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//注入真实对象</span></span><br><span class="line">        <span class="keyword">this</span>.userService = userService;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">add</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        log(<span class="string">"add"</span>);</span><br><span class="line">        userService.add();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">delete</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        log(<span class="string">"delete"</span>);</span><br><span class="line">        userService.delete();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">update</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        log(<span class="string">"update"</span>);</span><br><span class="line">        userService.update();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">query</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        log(<span class="string">"query"</span>);</span><br><span class="line">        userService.query();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//日志方法</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">log</span><span class="params">(String msg)</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"使用了"</span>+msg+<span class="string">"方法"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>客户端</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Client</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        UserServiceImpl userService = <span class="keyword">new</span> UserServiceImpl();</span><br><span class="line"></span><br><span class="line">        UserServiceProxy userServiceProxy = <span class="keyword">new</span> UserServiceProxy();</span><br><span class="line">        userServiceProxy.setUserService(userService);</span><br><span class="line">        userServiceProxy.add();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>执行结果：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&quot;C:\Program Files\Java\jdk1.8.0_221\bin\java.exe&quot; </span><br><span class="line">使用了add方法</span><br><span class="line">增加了一个用户</span><br><span class="line"></span><br><span class="line">Process finished with exit code 0</span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ol>
+<h3 id="10-3动态代理"><a href="#10-3动态代理" class="headerlink" title="10.3动态代理"></a>10.3动态代理</h3><ul>
+<li>动态代理和静态代理角色一样</li>
+<li>动态代理的类是动态生成的，不是我们写好的</li>
+<li>动态代理分为两大类：<ul>
+<li>基于接口的：JDK动态代理【重点】</li>
+<li>基于类：cglib</li>
+<li>Java字节码实现</li>
+</ul>
+</li>
+</ul>
+<p>需要了解两个类：Proxy（代理），InvocationHandler（调用处理程序）</p>
+<p>动态代理的本质就是利用反射实现的。</p>
+<p>反射没学好，等补课了反射，再来补上这个博客。。</p>
+]]></content>
+      <categories>
+        <category>Spring</category>
+      </categories>
+      <tags>
+        <tag>AOP</tag>
+        <tag>Spring</tag>
+        <tag>代理模式</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>9.使用Java的方式配置Spring</title>
     <url>/2020/02/15/9-%E4%BD%BF%E7%94%A8Java%E7%9A%84%E6%96%B9%E5%BC%8F%E9%85%8D%E7%BD%AESpring/</url>
     <content><![CDATA[<h1 id="9-使用Java的方式配置Spring"><a href="#9-使用Java的方式配置Spring" class="headerlink" title="9.使用Java的方式配置Spring"></a>9.使用Java的方式配置Spring</h1><p>我们现在要完全不适应Spring的xml配置了，全权交给Java来做</p>
-<p>JavaConfig睡是Spring的一个子项目，在Spring4之后成为了一个核心功能</p>
+<p>JavaConfig是Spring的一个子项目，在Spring4之后成为了一个核心功能</p>
 <a id="more"></a>
 <p>实体类：</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> com.lwj.pojo;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.springframework.beans.factory.annotation.Value;</span><br><span class="line"><span class="keyword">import</span> org.springframework.stereotype.Component;</span><br><span class="line"><span class="comment">//这里这个注解的意思就是说明这个类被Spring接管了，注册到了容器中</span></span><br><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">User</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Value</span>(<span class="string">"张三"</span>)</span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getName</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setName</span><span class="params">(String name)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.name = name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"User&#123;"</span> +</span><br><span class="line">                <span class="string">"name='"</span> + name + <span class="string">'\''</span> +</span><br><span class="line">                <span class="string">'&#125;'</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -20,6 +174,10 @@
       <categories>
         <category>Spring</category>
       </categories>
+      <tags>
+        <tag>Spring</tag>
+        <tag>注解</tag>
+      </tags>
   </entry>
   <entry>
     <title>8.使用注解开发</title>
@@ -103,6 +261,10 @@
       <categories>
         <category>Spring</category>
       </categories>
+      <tags>
+        <tag>Spring</tag>
+        <tag>注解</tag>
+      </tags>
   </entry>
   <entry>
     <title>随笔</title>
@@ -185,6 +347,10 @@
       <categories>
         <category>Spring</category>
       </categories>
+      <tags>
+        <tag>Spring</tag>
+        <tag>注解</tag>
+      </tags>
   </entry>
   <entry>
     <title>Spring网站改版了</title>
@@ -278,6 +444,10 @@
       <categories>
         <category>Spring</category>
       </categories>
+      <tags>
+        <tag>Spring</tag>
+        <tag>DI</tag>
+      </tags>
   </entry>
   <entry>
     <title>5.Spring的配置</title>
@@ -299,6 +469,9 @@
       <categories>
         <category>Spring</category>
       </categories>
+      <tags>
+        <tag>Spring</tag>
+      </tags>
   </entry>
   <entry>
     <title>4.IOC创建对象的方式</title>
@@ -325,6 +498,10 @@
       <categories>
         <category>Spring</category>
       </categories>
+      <tags>
+        <tag>Spring</tag>
+        <tag>IOC</tag>
+      </tags>
   </entry>
   <entry>
     <title>3.第一个Spring程序</title>
@@ -369,6 +546,10 @@
       <categories>
         <category>Spring</category>
       </categories>
+      <tags>
+        <tag>Spring</tag>
+        <tag>IOC</tag>
+      </tags>
   </entry>
   <entry>
     <title>2.IOC理论推导</title>
@@ -407,6 +588,10 @@
       <categories>
         <category>Spring</category>
       </categories>
+      <tags>
+        <tag>Spring</tag>
+        <tag>IOC</tag>
+      </tags>
   </entry>
   <entry>
     <title>1.Spring简介</title>
@@ -464,6 +649,9 @@
       <categories>
         <category>Spring</category>
       </categories>
+      <tags>
+        <tag>Spring</tag>
+      </tags>
   </entry>
   <entry>
     <title>6.动态SQL</title>
@@ -525,6 +713,10 @@
       <categories>
         <category>Mybatis</category>
       </categories>
+      <tags>
+        <tag>Mybatis</tag>
+        <tag>SQL</tag>
+      </tags>
   </entry>
   <entry>
     <title>5.解决属性名和字段不一致的问题</title>
@@ -557,6 +749,9 @@
       <categories>
         <category>Mybatis</category>
       </categories>
+      <tags>
+        <tag>Mybatis</tag>
+      </tags>
   </entry>
   <entry>
     <title>4.配置解析</title>
@@ -635,6 +830,9 @@ mappers（映射器）
       <categories>
         <category>Mybatis</category>
       </categories>
+      <tags>
+        <tag>Mybatis</tag>
+      </tags>
   </entry>
   <entry>
     <title>3.增删改查</title>
@@ -697,6 +895,12 @@ mappers（映射器）
       <categories>
         <category>Mybatis</category>
       </categories>
+      <tags>
+        <tag>AOP</tag>
+        <tag>Mybatis</tag>
+        <tag>SQL</tag>
+        <tag>模糊查询</tag>
+      </tags>
   </entry>
   <entry>
     <title>2.第一个Mybatis程序</title>
@@ -768,6 +972,9 @@ mappers（映射器）
       <categories>
         <category>Mybatis</category>
       </categories>
+      <tags>
+        <tag>Mybatis</tag>
+      </tags>
   </entry>
   <entry>
     <title>1.Mybatis简介</title>
@@ -846,6 +1053,9 @@ mappers（映射器）
       <categories>
         <category>Mybatis</category>
       </categories>
+      <tags>
+        <tag>Mybatis</tag>
+      </tags>
   </entry>
   <entry>
     <title>Ajax</title>
@@ -884,5 +1094,10 @@ mappers（映射器）
       <categories>
         <category>Ajax</category>
       </categories>
+      <tags>
+        <tag>前端</tag>
+        <tag>JS</tag>
+        <tag>Ajax</tag>
+      </tags>
   </entry>
 </search>
