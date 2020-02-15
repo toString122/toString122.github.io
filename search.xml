@@ -1,6 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>7.Bean的自动装配</title>
+    <url>/2020/02/15/7-Bean%E7%9A%84%E8%87%AA%E5%8A%A8%E8%A3%85%E9%85%8D/</url>
+    <content><![CDATA[<h1 id="7-Bean的自动装配"><a href="#7-Bean的自动装配" class="headerlink" title="7.Bean的自动装配"></a>7.Bean的自动装配</h1><ul>
+<li>自动装配是Spring满足Bean依赖的一种方式！</li>
+<li>Spring会在上下文中自动寻找Bean，自动给Bean装配属性</li>
+</ul>
+<p>一共有三种装配方式</p>
+<ol>
+<li>在xml中显式的配置</li>
+<li>在Java中显式的配置</li>
+<li>隐式的自动装配【重要】<a id="more"></a>
+<h3 id="7-1测试"><a href="#7-1测试" class="headerlink" title="7.1测试"></a>7.1测试</h3></li>
+</ol>
+<p>环境搭建： 一个人有两个宠物</p>
+<p>手动装配xml Bean</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"cat"</span> <span class="attr">class</span>=<span class="string">"com.lwj.pojo.Cat"</span>&gt;</span><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"dog"</span> <span class="attr">class</span>=<span class="string">"com.lwj.pojo.Dog"</span>&gt;</span><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"people"</span> <span class="attr">class</span>=<span class="string">"com.lwj.pojo.People"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"name"</span> <span class="attr">value</span>=<span class="string">"张三"</span>&gt;</span><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"cat"</span> <span class="attr">ref</span>=<span class="string">"cat"</span>&gt;</span><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"dog"</span> <span class="attr">ref</span>=<span class="string">"dog"</span>&gt;</span><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="7-2ByName自动装配"><a href="#7-2ByName自动装配" class="headerlink" title="7.2ByName自动装配"></a>7.2ByName自动装配</h3><figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"> <span class="comment">&lt;!--byName会自动在容器上下文中查找，和自己对象化set方法后面的值对应的BeanId!--&gt;</span></span><br><span class="line"><span class="comment">&lt;!--这样就自动吧Dog和Cat装配到People上面引用了--&gt;</span>  </span><br><span class="line"> <span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"people"</span> <span class="attr">class</span>=<span class="string">"com.lwj.pojo.People"</span> <span class="attr">autowire</span>=<span class="string">"byName"</span>&gt;</span></span><br><span class="line">     <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"name"</span> <span class="attr">value</span>=<span class="string">"张三"</span>&gt;</span><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"> <span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="7-3ByType"><a href="#7-3ByType" class="headerlink" title="7.3ByType"></a>7.3ByType</h3><figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="comment">&lt;!--byType会自动在容器上下文中查找，和自己对象属性类型相同的Bean!--&gt;</span></span><br><span class="line"><span class="comment">&lt;!--这样就自动吧Dog和Cat装配到People上面引用了--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"people"</span> <span class="attr">class</span>=<span class="string">"com.lwj.pojo.People"</span> <span class="attr">autowire</span>=<span class="string">"byType"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"name"</span> <span class="attr">value</span>=<span class="string">"张三"</span>&gt;</span><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="小结："><a href="#小结：" class="headerlink" title="小结："></a>小结：</h4><ul>
+<li>byName的时候，需要保证bean的id唯一，并且这个bean需要和自动注入非入属性的set方法的值一致！</li>
+<li>byType的时候，需要保证所有的class唯一，并且这个bean需要和自动注入的属性类型一致！</li>
+</ul>
+<h3 id="7-4使用注解实现自动装配【重点】"><a href="#7-4使用注解实现自动装配【重点】" class="headerlink" title="7.4使用注解实现自动装配【重点】"></a>7.4使用注解实现自动装配【重点】</h3><p>jdk1.5支持的注解，Spring2.5后支持注解</p>
+<blockquote>
+<p>The introduction of annotation-based configuration raised the question of whether this approach is “better” than XML. </p>
+</blockquote>
+<p>要使用注解须知：</p>
+<ul>
+<li><p>导入约束 :context约束</p>
+</li>
+<li><p>配置注解的支持：<a href="context:annotation-config/">context:annotation-config/</a></p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">beans</span> <span class="attr">xmlns</span>=<span class="string">"http://www.springframework.org/schema/beans"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">xmlns:xsi</span>=<span class="string">"http://www.w3.org/2001/XMLSchema-instance"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">xmlns:context</span>=<span class="string">"http://www.springframework.org/schema/context"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">xsi:schemaLocation</span>=<span class="string">"http://www.springframework.org/schema/beans</span></span></span><br><span class="line"><span class="tag"><span class="string">        https://www.springframework.org/schema/beans/spring-beans.xsd</span></span></span><br><span class="line"><span class="tag"><span class="string">        http://www.springframework.org/schema/context</span></span></span><br><span class="line"><span class="tag"><span class="string">        https://www.springframework.org/schema/context/spring-context.xsd"</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">context:annotation-config</span>/&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">beans</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ul>
+<h4 id="Autowired【常用】"><a href="#Autowired【常用】" class="headerlink" title="@Autowired【常用】"></a>@Autowired【常用】</h4><p>  直接在属性上即可！也可以在set方法上使用！</p>
+<p>  使用@Aotiowried我们可以不用白那些Set方法了，前提是你这个自动装配的属性在IOC容器中存在，且符合名字byName!</p>
+<p>  科普：</p>
+  <figure class="highlight xml"><table><tr><td class="code"><pre><span class="line">@Nullable  字段标记了这个注解，说明这个字段可以为null</span><br></pre></td></tr></table></figure>
+
+  <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//如果定义了Autowired的required属性为false，说明这个对象可以为空，否则不能为空</span></span><br><span class="line"><span class="meta">@Autowired</span>(required = <span class="keyword">false</span>)</span><br><span class="line"><span class="keyword">private</span>  Cat cat;</span><br><span class="line"><span class="meta">@Autowired</span></span><br><span class="line"><span class="keyword">private</span> Dog dog;</span><br><span class="line"><span class="keyword">private</span> String name;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>  如果@Autowrided自动装配环境比较复杂，奏定装配无法通过一个注解（@Autowrided）完成的时候，我们可以使用@Qualifier(value = “***”)去配合@Autowrided的使用，来获得唯一一个bean对象注入！</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Autowired</span>()</span><br><span class="line"><span class="meta">@Qualifier</span>(value = <span class="string">"dog222"</span>)</span><br><span class="line"><span class="keyword">private</span>  Cat cat;</span><br><span class="line"><span class="meta">@Autowired</span></span><br><span class="line"><span class="keyword">private</span> Dog dog;</span><br><span class="line"><span class="keyword">private</span> String name;</span><br></pre></td></tr></table></figure>
+
+<h4 id="Resource【不常用】"><a href="#Resource【不常用】" class="headerlink" title="@Resource【不常用】"></a>@Resource【不常用】</h4><p>使用方法和Aotiowried差不多，不需要Spring框架的支持，是Java自带的。</p>
+<h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><p>Aotiowried和Resource的区别：</p>
+<ul>
+<li>都是用来自动装配的，都可以放在属性字段上</li>
+<li>Aotiowried是通过byType的的方式实现，找不到再找byName，而且必须要求这两个对象存在！【常用】</li>
+<li>Resource默认通过nyName的方式实现，如果找不到名字，则通过byType实现，如果两个都找不到就报错了。</li>
+</ul>
+]]></content>
+      <categories>
+        <category>Spring</category>
+      </categories>
+  </entry>
+  <entry>
     <title>Spring网站改版了</title>
     <url>/2020/02/14/Spring%E7%BD%91%E7%AB%99%E6%94%B9%E7%89%88%E4%BA%86/</url>
     <content><![CDATA[<p><strong>2020年2月14日晚</strong></p>
@@ -74,6 +141,18 @@
 
 
 
+</li>
+</ol>
+<h3 id="6-3Bean的作用域"><a href="#6-3Bean的作用域" class="headerlink" title="6.3Bean的作用域"></a>6.3Bean的作用域</h3><p><img src="/images/TIM%E6%88%AA%E5%9B%BE20200215104307.jpg" alt=""></p>
+<ol>
+<li><p>单例模式（Spring默认机制）</p>
+<figure class="highlight"><table><tr><td class="code"><pre><span class="line">&lt;bean id=<span class="string">"address"</span> <span class="class"><span class="keyword">class</span></span>=<span class="string">"com.lwj.pojo.Address"</span> scope=<span class="string">"singleton"</span>&gt;</span><br><span class="line">    &lt;property name="address" value="山东"&gt;&lt;/property&gt;</span><br><span class="line">&lt;/bean&gt;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>原型模式</p>
+<p>每次从容器中GET的时候都会产生一个新对象</p>
+<figure class="highlight"><table><tr><td class="code"><pre><span class="line">&lt;bean id=<span class="string">"address"</span> <span class="class"><span class="keyword">class</span></span>=<span class="string">"com.lwj.pojo.Address"</span> scope=<span class="string">"prototype"</span>&gt;</span><br><span class="line">    &lt;property name="address" value="山东"&gt;&lt;/property&gt;</span><br><span class="line">&lt;/bean&gt;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>其余的request，session，application这些只能在web开发中遇到！</p>
 </li>
 </ol>
 ]]></content>
