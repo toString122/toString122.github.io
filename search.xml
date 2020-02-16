@@ -1,6 +1,104 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>13.声明式事务</title>
+    <url>/2020/02/16/13-%E5%A3%B0%E6%98%8E%E5%BC%8F%E4%BA%8B%E5%8A%A1/</url>
+    <content><![CDATA[<h1 id="13-声明式事务"><a href="#13-声明式事务" class="headerlink" title="13.声明式事务"></a>13.声明式事务</h1><h3 id="1-回顾事务"><a href="#1-回顾事务" class="headerlink" title="1.回顾事务"></a>1.回顾事务</h3><ul>
+<li><p>把一组业务当成一个业务来做，要么都成功，要么都失败</p>
+</li>
+<li><p>事务在项目开发中十分重要，涉及到数据的一致性问题，不得马虎！</p>
+</li>
+<li><p>确保完整性和一致性</p>
+<a id="more"></a>
+
+
+</li>
+</ul>
+<p>事务ACID原则：</p>
+<ul>
+<li>原子性</li>
+<li>一致性</li>
+<li>隔离性<ul>
+<li>多个业务可能操作同一个资源，防止数据损坏</li>
+</ul>
+</li>
+<li>持久性<ul>
+<li>事务一旦提交，无论系统发生什么问题，结果都不会影响，被持久化的写道存储器中。</li>
+</ul>
+</li>
+</ul>
+<h3 id="2-spring的事务管理"><a href="#2-spring的事务管理" class="headerlink" title="2.spring的事务管理"></a>2.spring的事务管理</h3><ul>
+<li><p>声明式事务：AOP</p>
+</li>
+<li><p>编程式事务：代码中修改，进行事务的管理</p>
+</li>
+</ul>
+<p>思考：</p>
+<p>为什么需要事务？</p>
+<ul>
+<li>如果不配置事务，可能存在数据提交不一致的情况；</li>
+<li>如果我们不在spring中配置声明式事务，我们就要在代码中手动配置事务</li>
+<li><strong>事务在项目于的开发中十分重要，涉及到数据的一致性和完整性问题！</strong></li>
+</ul>
+]]></content>
+      <categories>
+        <category>Spring</category>
+      </categories>
+      <tags>
+        <tag>Spring</tag>
+        <tag>Mybatis</tag>
+        <tag>事务</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>12.整合Mybatis</title>
+    <url>/2020/02/16/12-%E6%95%B4%E5%90%88Mybatis/</url>
+    <content><![CDATA[<h1 id="12-整合Mybatis"><a href="#12-整合Mybatis" class="headerlink" title="12.整合Mybatis"></a>12.整合Mybatis</h1><p>步骤：</p>
+<ol>
+<li><p>导入jar包</p>
+<ul>
+<li>junit</li>
+<li>mybatis</li>
+<li>mysql</li>
+<li>spring</li>
+<li>aop织入</li>
+<li>mybatis-spring</li>
+</ul>
+</li>
+<li><p>编写配置文件</p>
+</li>
+<li><p>测试</p>
+<a id="more"></a>
+<h3 id="12-1回忆Mybatis"><a href="#12-1回忆Mybatis" class="headerlink" title="12.1回忆Mybatis"></a>12.1回忆Mybatis</h3></li>
+<li><p>编写实体类</p>
+</li>
+<li><p>编写核心配置文件</p>
+</li>
+<li><p>编写接口</p>
+</li>
+<li><p>编写Mapper.xml</p>
+</li>
+<li><p>测试</p>
+</li>
+</ol>
+<h3 id="12-2Mybatis-spring"><a href="#12-2Mybatis-spring" class="headerlink" title="12.2Mybatis-spring"></a>12.2Mybatis-spring</h3><ol>
+<li>编写数据源</li>
+<li>sqlSessionFactory</li>
+<li>selSessionTemplate</li>
+<li>需要给接口加实现类</li>
+<li>将自己写的实现类，注入到Spring中</li>
+<li>测试使用</li>
+</ol>
+]]></content>
+      <categories>
+        <category>Spring</category>
+      </categories>
+      <tags>
+        <tag>Spring</tag>
+        <tag>Mybatis</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>11.AOP</title>
     <url>/2020/02/15/11-AOP/</url>
     <content><![CDATA[<h1 id="11-AOP"><a href="#11-AOP" class="headerlink" title="11.AOP"></a>11.AOP</h1><h3 id="11-1什么是AOP"><a href="#11-1什么是AOP" class="headerlink" title="11.1什么是AOP"></a>11.1什么是AOP</h3><p>在软件业，AOP为Aspect Oriented Programming的缩写，意为：<a href="https://baike.baidu.com/item/面向切面编程/6016335" target="_blank" rel="noopener">面向切面编程</a>，通过<a href="https://baike.baidu.com/item/预编译/3191547" target="_blank" rel="noopener">预编译</a>方式和运行期间动态代理实现程序功能的统一维护的一种技术。AOP是<a href="https://baike.baidu.com/item/OOP" target="_blank" rel="noopener">OOP</a>的延续，是软件开发中的一个热点，也是<a href="https://baike.baidu.com/item/Spring" target="_blank" rel="noopener">Spring</a>框架中的一个重要内容，是<a href="https://baike.baidu.com/item/函数式编程/4035031" target="_blank" rel="noopener">函数式编程</a>的一种衍生范型。利用AOP可以对业务逻辑的各个部分进行隔离，从而使得业务逻辑各部分之间的<a href="https://baike.baidu.com/item/耦合度/2603938" target="_blank" rel="noopener">耦合度</a>降低，提高程序的可重用性，同时提高了开发的效率。</p>
@@ -26,8 +124,7 @@
 
 
 
-<p>方式一:使用Spring的接口</p>
-<ol>
+<h4 id="方式一-使用Spring的接口"><a href="#方式一-使用Spring的接口" class="headerlink" title="方式一:使用Spring的接口"></a>方式一:使用Spring的接口</h4><ol>
 <li><p>编写我们的业务接口和实现类</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">UserService</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">add</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">delete</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">update</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">select</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
@@ -46,6 +143,26 @@
 
 <p>Aop的重要性 : 很重要 . 一定要理解其中的思路 , 主要是思想的理解这一块 .</p>
 <p>Spring的Aop就是将公共的业务 (日志 , 安全等) 和领域业务结合起来 , 当执行领域业务时 , 将会把公共业务加进来 . 实现公共业务的重复利用 . 领域业务更纯粹 , 程序猿专注领域业务 , 其本质还是动态代理 .</p>
+</li>
+</ol>
+<h4 id="方式二-使用自定义类-主要是切面定义"><a href="#方式二-使用自定义类-主要是切面定义" class="headerlink" title="方式二:使用自定义类[主要是切面定义]"></a>方式二:使用自定义类[主要是切面定义]</h4><ol>
+<li><p>自定义一个类</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DiyPointCut</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">before</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"方法执行前"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">after</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"方法执行后"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>xml配置</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="comment">&lt;!--方式二--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"diy"</span> <span class="attr">class</span>=<span class="string">"com.lwj.diy.DiyPointCut"</span>&gt;</span><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">aop:config</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!--自定义切面，ref引用的类--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">aop:aspect</span> <span class="attr">ref</span>=<span class="string">"diy"</span>&gt;</span></span><br><span class="line">        <span class="comment">&lt;!--切入点--&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">aop:pointcut</span> <span class="attr">id</span>=<span class="string">"pointcut"</span> <span class="attr">expression</span>=<span class="string">"execution(* com.*.*.*.*(..))"</span>/&gt;</span></span><br><span class="line">        <span class="comment">&lt;!--通知--&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">aop:before</span> <span class="attr">method</span>=<span class="string">"before"</span> <span class="attr">pointcut-ref</span>=<span class="string">"pointcut"</span>&gt;</span><span class="tag">&lt;/<span class="name">aop:before</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">aop:after</span> <span class="attr">method</span>=<span class="string">"after"</span> <span class="attr">pointcut-ref</span>=<span class="string">"pointcut"</span>&gt;</span><span class="tag">&lt;/<span class="name">aop:after</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">aop:aspect</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">aop:config</span>&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>测试代码和方式一形同</p>
+</li>
+</ol>
+<h4 id="方式二三-使用注解实现"><a href="#方式二三-使用注解实现" class="headerlink" title="方式二三:使用注解实现"></a>方式二三:使用注解实现</h4><ol>
+<li><p>开启注解支持和配置bean</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"annotationPointCut"</span> <span class="attr">class</span>=<span class="string">"com.lwj.diy.AnnotationPointCut"</span>&gt;</span><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!--开启注解支持--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">aop:aspectj-autoproxy</span>&gt;</span><span class="tag">&lt;/<span class="name">aop:aspectj-autoproxy</span>&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>自定义类</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//方式三：只用注解实现aop</span></span><br><span class="line"><span class="meta">@Aspect</span><span class="comment">//标注这个类为切面</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">AnnotationPointCut</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Before</span>(<span class="string">"execution(* com.lwj.*.*.*(..))"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">before</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"方法执行前"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@After</span>(<span class="string">"execution(* com.lwj.*.*.*(..))"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">after</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"方法执行后"</span>);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>测试方法与上面一致</p>
 </li>
 </ol>
 ]]></content>
